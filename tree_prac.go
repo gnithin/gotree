@@ -9,5 +9,4 @@ func main() {
 	t := tree.MakeNode(22)
 	c := tree.MakeNode(221)
 	t.AddChild("left", c)
-	fmt.Printf("%s", t)
 }
