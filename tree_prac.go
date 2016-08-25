@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	lib "tree_prac/lib"
+	tree "tree_prac/tree"
 )
 
 func main() {
-	fmt.Printf("%s", lib.MakeNode(12))
+	t := tree.MakeNode(22)
+	c := tree.MakeNode(221)
+	t.AddChild("left", c)
+	fmt.Printf("%s", t)
 }
