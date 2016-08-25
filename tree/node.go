@@ -1,5 +1,8 @@
 package lib
 
+// TODO:
+// Add a switch for enabling or disabling parent key in the tree
+
 import (
 	//"bytes"
 	"fmt"
