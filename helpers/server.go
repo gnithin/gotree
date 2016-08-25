@@ -2,9 +2,11 @@ package helpers
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"path/filepath"
 )
 
@@ -34,34 +36,58 @@ func CreateServer() {
 
 func fileHandler(reqUrl string) (string, error) {
 	// check the file
-	fullPath, pathErr := filepath.Abs(reqUrl[1:])
-	if pathErr != nil {
-		fmt.Println("The filepath does not exist")
-		fmt.Println(pathErr)
-		return "", pathErr
+	fmt.Println("Getting the new file")
+	fileContents, err := getFile(reqUrl)
+	if err != nil {
+		fmt.Println("Error fetching the file")
+		fmt.Println(err)
+		return "", err
 	} else {
-		fmt.Println("Getting the new file")
-		fileContents, err := getFile(fullPath)
-		if err != nil {
-			fmt.Println("Error fetching the file")
-			fmt.Println(err)
-			return "", err
-		} else {
-			return string(fileContents), nil
-		}
+		return string(fileContents), nil
 	}
+
 }
 
 func (h *handlerStruct) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	fmt.Println("*************************************")
-	reqUrl := req.URL.String()
-	fmt.Println("Hitting - ", reqUrl)
+	reqUrl := req.URL.Path
+	fmt.Println("Hitting - ", req.URL.String())
 	f, isExists := mux[reqUrl]
 	if !isExists {
-		fmt.Println("The url does not exist - ", reqUrl)
+		fmt.Println("The url does not exist, so fetching from file - ", reqUrl)
+		reqUrl, pathErr := filepath.Abs(reqUrl[1:])
+		if pathErr != nil {
+			fmt.Println("The filepath does not exist")
+			fmt.Println(pathErr)
+			return
+		}
 		respStr, err := fileHandler(reqUrl)
 		if err == nil {
-			io.WriteString(resp, respStr)
+			// Check if it has params
+			filePath := req.URL.Query().Get("filePath")
+			if len(filePath) != 0 {
+				// Host the template
+				filePath, escErr := url.QueryUnescape(filePath)
+				if escErr != nil {
+					fmt.Println("Error when unescaping url")
+				} else {
+					t, templateErr := template.ParseFiles(reqUrl)
+					fmt.Println("Starting to template!!")
+					if templateErr != nil {
+						fmt.Println("Tempalte error")
+						fmt.Println(templateErr)
+					} else {
+						type DummyStruct struct {
+							filePath string
+						}
+						dummy := DummyStruct{filePath: filePath}
+						fmt.Println("Dummt - ", dummy.filePath)
+						t.Execute(resp, dummy)
+					}
+				}
+			} else {
+				io.WriteString(resp, respStr)
+			}
 		}
 	} else {
 		// Calling the function
