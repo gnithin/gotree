@@ -1,8 +1,5 @@
 package tree
 
-// TODO:
-// Add a switch for enabling or disabling parent key in the tree
-
 import (
 	//"bytes"
 	"fmt"
@@ -14,18 +11,14 @@ type TreeData struct {
 	Num int
 }
 
+// CreateTreeData creates Tree data populated from the argument and
+// returns a reference to the TreeData
 func CreateTreeData(n int) *TreeData {
 	return &TreeData{n}
 }
 
 type Node struct {
-	// TODO: The data needs to be a general container.
-	// It should hold anything. Could be anything
 	data *TreeData
-
-	// TODO: Think about what type the keys of the map needs to be.
-	// Making it a string seems to be a simple cast. Myabe there are
-	// situations where it shouldn't be a string
 	link customMap
 }
 

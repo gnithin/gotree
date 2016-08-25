@@ -1,15 +1,14 @@
 <html>
     <head>
-        <link rel="stylesheet" href="alchemyFiles/alchemy.min.css"/>
+        <link rel="stylesheet" href="assets/alchemyFiles/alchemy.min.css"/>
     </head>
     <body>
-        {{.filePath}}
         <div class="alchemy" id="alchemy"></div>
-        <script src="alchemyFiles/scripts/vendor.js"></script>
-        <script src="alchemyFiles/alchemy.js"></script>
+        <script src="assets/alchemyFiles/scripts/vendor.js"></script>
+        <script src="assets/alchemyFiles/alchemy.js"></script>
         <script type="text/javascript">
             var config = {
-            dataSource: 'data/sample.json',
+                dataSource: 'assets/data/sample.json',
             };
 
             alchemy = new Alchemy(config)
