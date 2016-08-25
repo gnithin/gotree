@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"tree_prac/helpers"
 	tree "tree_prac/tree"
 )
 
@@ -10,4 +11,7 @@ func main() {
 	c := tree.MakeNode(tree.CreateTreeData(2211))
 	t.AddChild("left", c)
 	fmt.Println(t)
+
+	// Needed to display the graph
+	helpers.CreateServer()
 }
