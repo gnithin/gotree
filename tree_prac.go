@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	t := tree.MakeNode(22)
-	c := tree.MakeNode(221)
+	t := tree.MakeNode(tree.CreateTreeData(22))
+	c := tree.MakeNode(tree.CreateTreeData(2211))
 	t.AddChild("left", c)
+	fmt.Println(t)
 }

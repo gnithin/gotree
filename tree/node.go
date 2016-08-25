@@ -1,4 +1,4 @@
-package lib
+package tree
 
 // TODO:
 // Add a switch for enabling or disabling parent key in the tree
@@ -10,10 +10,18 @@ import (
 
 type customMap map[string]*Node
 
+type TreeData struct {
+	Num int
+}
+
+func CreateTreeData(n int) *TreeData {
+	return &TreeData{n}
+}
+
 type Node struct {
 	// TODO: The data needs to be a general container.
 	// It should hold anything. Could be anything
-	data int
+	data *TreeData
 
 	// TODO: Think about what type the keys of the map needs to be.
 	// Making it a string seems to be a simple cast. Myabe there are
@@ -21,7 +29,7 @@ type Node struct {
 	link customMap
 }
 
-func MakeNode(data int) *Node {
+func MakeNode(data *TreeData) *Node {
 	// TODO: Needs to be changed whenever the Node is changed
 	return &Node{
 		data: data,
@@ -36,10 +44,12 @@ func (n *Node) String() string {
 
 func (n *Node) AddChild(key string, childPtr *Node) {
 	n.link[key] = childPtr
-	_, isExists := childPtr.link["parent"]
-	if !isExists {
-		childPtr.link["parent"] = n
-	}
+	/*
+		_, isExists := childPtr.link["parent"]
+		if !isExists {
+			childPtr.link["parent"] = n
+		}
+	*/
 }
 
 // TODO: This is a fucking mess
