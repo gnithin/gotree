@@ -27,8 +27,9 @@ func showGraph(resp http.ResponseWriter, req *http.Request) {
 	} else {
 		fmt.Println("Could not read get parameter, setting default")
 		// Setting a default filePath
-		getFilePath = "data/sample.json"
+		getFilePath = "assets/data/sample.json"
 	}
+
 	// Using the template
 	t, templateErr := template.ParseFiles("assets/view_graph.html")
 	fmt.Println("Starting to template!!")
@@ -37,10 +38,10 @@ func showGraph(resp http.ResponseWriter, req *http.Request) {
 		fmt.Println(templateErr)
 	} else {
 		type DummyStruct struct {
-			filePath string
+			FilePath string
 		}
-		dummy := DummyStruct{filePath: getFilePath}
-		fmt.Println("Dummt - ", dummy.filePath)
+		dummy := DummyStruct{FilePath: getFilePath}
+		fmt.Println("Dummt - ", dummy.FilePath)
 		t.Execute(resp, dummy)
 	}
 }

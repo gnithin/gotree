@@ -3,15 +3,29 @@
         <link rel="stylesheet" href="assets/alchemyFiles/alchemy.min.css"/>
     </head>
     <body>
+        <div id="filePath" style="display:None">
+            {{.FilePath}}
+        </div>
         <div class="alchemy" id="alchemy"></div>
         <script src="assets/alchemyFiles/scripts/vendor.js"></script>
         <script src="assets/alchemyFiles/alchemy.js"></script>
         <script type="text/javascript">
+        function main(){
+            var fileElem = document.getElementById("filePath")
+            if(!fileElem || typeof(fileElem) === "undefined"){
+                console.log("Choosing default")
+                filePath = "assets/data/sample.json"
+            }else{
+                filePath = fileElem.innerText.trim()
+            }
+            console.log("File path - " + filePath) 
             var config = {
-                dataSource: 'assets/data/sample.json',
+                dataSource: filePath
             };
 
             alchemy = new Alchemy(config)
+        }
+        main()
         </script>
     </body>
 </html>
