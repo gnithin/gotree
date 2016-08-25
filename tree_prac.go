@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"tree_prac/helpers"
-	tree "tree_prac/tree"
+	"gotree/helpers"
+	tree "gotree/tree"
 )
 
 func main() {
