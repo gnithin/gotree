@@ -7,11 +7,19 @@ import (
 )
 
 func main() {
-	t := tree.MakeNode(tree.CreateTreeData(22))
-	c := tree.MakeNode(tree.CreateTreeData(2211))
-	t.AddChild("left", c)
-	resp := t.GetJSONTree()
-	fmt.Println("Format - ", resp)
+	treeObj := tree.CreateTree()
+	treeObj.Insert(3)
+	treeObj.Insert(5)
+	treeObj.Insert(1)
+	treeObj.Insert(10)
+	treeObj.Insert(7)
+	treeObj.Insert(5)
+	treeObj.Insert(6)
+
+	fmt.Println("Aas")
+
+	//resp := t.GetJSONTree()
+	//fmt.Println("Format - ", resp)
 
 	// Needed to display the graph
 	// TODO: Uncomment please
