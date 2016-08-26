@@ -81,7 +81,7 @@ func insertBST(parent *Node, newNode *Node) {
 		insertBST(childNode, newNode)
 	} else {
 		// It needs to be inserted here
-		parent.link[dirn] = newNode
+		parent.AddChild(dirn, newNode)
 	}
 }
 

@@ -22,6 +22,7 @@ func (n *Node) String() string {
 
 func (n *Node) AddChild(key string, childPtr *Node) {
 	n.link[key] = childPtr
+	// TODO: Think of what to do with this block
 	/*
 		_, isExists := childPtr.link["parent"]
 		if !isExists {

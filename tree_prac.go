@@ -16,7 +16,7 @@ func main() {
 	treeObj.Insert(5)
 	treeObj.Insert(6)
 
-	fmt.Println("Aas")
+	fmt.Println("")
 
 	//resp := t.GetJSONTree()
 	//fmt.Println("Format - ", resp)
