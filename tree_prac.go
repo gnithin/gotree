@@ -16,10 +16,8 @@ func main() {
 	treeObj.Insert(5)
 	treeObj.Insert(6)
 
-	fmt.Println("")
-
-	//resp := t.GetJSONTree()
-	//fmt.Println("Format - ", resp)
+	resp := treeObj.GetJSONTree()
+	fmt.Println("Format - ", string(resp))
 
 	// Needed to display the graph
 	// TODO: Uncomment please

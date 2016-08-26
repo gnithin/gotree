@@ -87,6 +87,38 @@ func insertBST(parent *Node, newNode *Node) {
 
 // Creates a JSON output for the current tree as specified by alchemy
 func (self *Tree) GetJSONTree() []byte {
+	treeRep := make(map[string]interface{})
+
+	var nodesArr []map[string]interface{}
+	var edgesArr []map[string]interface{}
+	treeRep["nodes"] = nodesArr
+	treeRep["edges"] = edgesArr
+
+	self.traverseAndPopulate(treeRep)
+	fmt.Println(treeRep)
+
+	treeJson, err := json.Marshal(treeRep)
+	if err != nil {
+		fmt.Println("Error marshalling the tree to json")
+		fmt.Println(err)
+	} else {
+		return treeJson
+	}
+
+	return nil
+}
+
+func (self *Tree) traverseAndPopulate(treeRep map[string]interface{}) {
+	postOrderTraverse(self.root, treeRep)
+}
+
+/*
+- Traverse each node
+- Add it self
+- Traverse in post order, when visiting every child, add the node.
+- When visiting every root, add the edge
+*/
+func postOrderTraverse(root *Node, treeRep map[string]interface{}) (string, bool) {
 	/*
 		The resulting structure needs to be of this format -
 		{
@@ -108,38 +140,52 @@ func (self *Tree) GetJSONTree() []byte {
 			]
 		}
 	*/
-	treeRep := make(map[string]interface{})
-
-	var nodesArr []map[string]interface{}
-	var edgesArr []map[string]interface{}
-	treeRep["nodes"] = nodesArr
-	treeRep["edges"] = edgesArr
-
-	popStatus := self.traverseAndPopulate(&treeRep)
-
-	if !popStatus {
-		fmt.Println("Error populating the tree representation")
-	} else {
-		treeJson, err := json.Marshal(treeRep)
-		if err != nil {
-			fmt.Println("Error marshalling the tree to json")
-			fmt.Println(err)
-		} else {
-			return treeJson
-		}
+	if root == nil {
+		return "", false
 	}
 
-	return nil
-}
+	treeRepNodesArrV := treeRep["nodes"].([]map[string]interface{})
+	treeRepEdgesArrV := treeRep["edges"].([]map[string]interface{})
 
-/*
-TODO: Complete this -
-- Traverse each node
-- Add it self
-- Traverse in post order, when visiting every child, add the node.
-- When visiting every root, add the edge
-*/
-func (self *Tree) traverseAndPopulate(treeRep *map[string]interface{}) bool {
-	panic("Not implemented yet!!!")
-	return false
+	treeRepNodesArr := &treeRepNodesArrV
+	treeRepEdgesArr := &treeRepEdgesArrV
+
+	// Adding the root node
+	*treeRepNodesArr = append(
+		*treeRepNodesArr,
+		map[string]interface{}{
+			"id":      root.id,
+			"caption": "",
+			"type":    "",
+		},
+	)
+
+	// Go left
+	luuid, lExists := postOrderTraverse(root.link["left"], treeRep)
+	if lExists {
+		*treeRepEdgesArr = append(
+			*treeRepEdgesArr,
+			map[string]interface{}{
+				"source":  root.id,
+				"target":  luuid,
+				"caption": "",
+			},
+		)
+	}
+
+	// Go right
+	ruuid, rExists := postOrderTraverse(root.link["right"], treeRep)
+	if rExists {
+		*treeRepEdgesArr = append(
+			*treeRepEdgesArr,
+			map[string]interface{}{
+				"source":  root.id,
+				"target":  ruuid,
+				"caption": "",
+			},
+		)
+	}
+
+	fmt.Println("here")
+	return root.id, true
 }
