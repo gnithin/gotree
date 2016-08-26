@@ -1,0 +1,4 @@
+- Figure out a cleaner way to handle errors (Maybe a utility method that only handles different errors)
+- Figure out a cleaner packaging layout (Node and Tree are separate. But not to be nested. Node shouldn't be available to the outside world)
+- Add a logger and importantly, log stuff. Don't be a wimp.
+- Write tests for a large number of entries. And perform a traversal. Measure time
