@@ -10,22 +10,32 @@
         <script src="assets/alchemyFiles/scripts/vendor.js"></script>
         <script src="assets/alchemyFiles/alchemy.js"></script>
         <script type="text/javascript">
-        function main(){
-            var fileElem = document.getElementById("filePath")
-            if(!fileElem || typeof(fileElem) === "undefined"){
-                console.log("Choosing default")
-                filePath = "assets/data/sample.json"
-            }else{
-                filePath = fileElem.innerText.trim()
-            }
-            console.log("File path - " + filePath) 
-            var config = {
-                dataSource: filePath
-            };
+            var DEFAULT_JSON_FILE_PATH = "assets/data/sample.json"
+            function setAlchemy(filePath){
+                if(typeof(filePath) === "undefined" || filePath.trim() === ""){
+                    filePath = DEFAULT_JSON_FILE_PATH;
+                }
+                console.log("File path - " + filePath);
+                
+                var config = {
+                    dataSource: filePath
+                };
 
-            alchemy = new Alchemy(config)
-        }
-        main()
+                alchemy = new Alchemy(config);
+            }
+            (function (){
+                /*
+                   Fetching the json file specified int he filePath id
+                */
+                var fileElem = document.getElementById("filePath");
+                if(!fileElem || typeof(fileElem) === "undefined"){
+                    console.log("Choosing default");
+                    filePath = DEFAULT_JSON_FILE_PATH;
+                }else{
+                    filePath = fileElem.innerText.trim();
+                }
+                setAlchemy(filePath);
+            })()
         </script>
     </body>
 </html>
