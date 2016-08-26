@@ -1,8 +1,8 @@
 package tree
 
 import (
-	//"bytes"
 	"fmt"
+	"github.com/nu7hatch/gouuid"
 )
 
 type customData struct {
@@ -11,6 +11,7 @@ type customData struct {
 type customMap map[string]*Node
 
 type Node struct {
+	id   string
 	data *customData
 	link customMap
 }
@@ -50,8 +51,12 @@ func createTreeData(n int) *customData {
 
 // Creates a node
 func makeNode(data *customData) *Node {
-	// TODO: Needs to be changed whenever the Node is changed
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		panic("Error generating a new UUID.")
+	}
 	return &Node{
+		id:   uuid.String(),
 		data: data,
 		link: make(map[string]*Node),
 	}
