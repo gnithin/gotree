@@ -171,8 +171,15 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 	)
 	// This is a bit crazy, but hey, I didn't make the rules
 	// http://stackoverflow.com/questions/28054913/modify-array-of-interface-golang
-	self.treeDispMap["nodes"] = treeRepNodesArr
 	//self.treeDispMap["nodes"] = treeRepNodesArr.(interface{})
+	/*
+		^ is needed if the present method is not a struct method(I
+		don't know what else to call this thing).
+		But if it's not a struct method, the above line raises and
+		error and a simple assignment does the trick.
+		TODO: Figure out what the fuck is this shit
+	*/
+	self.treeDispMap["nodes"] = treeRepNodesArr
 
 	// Go left
 	luuid, lExists := self.postOrderTraverse(root.link["left"])
