@@ -7,11 +7,12 @@ import (
 )
 
 type Tree struct {
-	root      *Node
-	len       int
-	leavesLen int
-	treeType  int
-	id        string
+	root        *Node
+	len         int
+	leavesLen   int
+	treeType    int
+	id          string
+	treeDispMap map[string]interface{}
 }
 
 // Module level function
@@ -22,12 +23,21 @@ func CreateTree() *Tree {
 		panic("Error generating a new UUID.")
 	}
 
+	nodesArr := []map[string]interface{}{}
+	edgesArr := []map[string]interface{}{}
+
+	tMap := map[string]interface{}{
+		"nodes": nodesArr,
+		"edges": edgesArr,
+	}
+
 	return &Tree{
-		root:      nil,
-		len:       0,
-		leavesLen: 0,
-		treeType:  TREE_TYPE_BST,
-		id:        uuid.String(), // This is going to tbe used to debug stuff
+		root:        nil,
+		len:         0,
+		leavesLen:   0,
+		treeType:    TREE_TYPE_BST,
+		id:          uuid.String(),
+		treeDispMap: tMap,
 	}
 }
 
@@ -95,29 +105,26 @@ func insertBST(parent *Node, newNode *Node) {
 
 // Creates a JSON output for the current tree as specified by alchemy
 func (self *Tree) GetJSONTree() []byte {
-	treeRep := make(map[string]interface{})
+	self.postOrderTraverse(self.root)
+	fmt.Println(self.treeDispMap)
 
-	var nodesArr []map[string]interface{}
-	var edgesArr []map[string]interface{}
-	treeRep["nodes"] = nodesArr
-	treeRep["edges"] = edgesArr
+	var treeJson []byte
+	var jsonErr error
 
-	self.traverseAndPopulate(treeRep)
-	fmt.Println(treeRep)
+	if PRETTY_PRINT_TREE {
+		treeJson, jsonErr = json.MarshalIndent(self.treeDispMap, "", "    ")
+	} else {
+		treeJson, jsonErr = json.Marshal(self.treeDispMap)
+	}
 
-	treeJson, err := json.Marshal(treeRep)
-	if err != nil {
+	if jsonErr != nil {
 		fmt.Println("Error marshalling the tree to json")
-		fmt.Println(err)
+		fmt.Println(jsonErr)
 	} else {
 		return treeJson
 	}
 
 	return nil
-}
-
-func (self *Tree) traverseAndPopulate(treeRep map[string]interface{}) {
-	postOrderTraverse(self.root, treeRep)
 }
 
 /*
@@ -126,7 +133,7 @@ func (self *Tree) traverseAndPopulate(treeRep map[string]interface{}) {
 - Traverse in post order, when visiting every child, add the node.
 - When visiting every root, add the edge
 */
-func postOrderTraverse(root *Node, treeRep map[string]interface{}) (string, bool) {
+func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 	/*
 		The resulting structure needs to be of this format -
 		{
@@ -152,48 +159,56 @@ func postOrderTraverse(root *Node, treeRep map[string]interface{}) (string, bool
 		return "", false
 	}
 
-	treeRepNodesArrV := treeRep["nodes"].([]map[string]interface{})
-	treeRepEdgesArrV := treeRep["edges"].([]map[string]interface{})
-
-	treeRepNodesArr := &treeRepNodesArrV
-	treeRepEdgesArr := &treeRepEdgesArrV
-
+	treeRepNodesArr := self.treeDispMap["nodes"].([]map[string]interface{})
 	// Adding the root node
-	*treeRepNodesArr = append(
-		*treeRepNodesArr,
+	treeRepNodesArr = append(
+		treeRepNodesArr,
 		map[string]interface{}{
 			"id":      root.id,
 			"caption": "",
 			"type":    "",
 		},
 	)
+	// This is a bit crazy, but hey, I didn't make the rules
+	// http://stackoverflow.com/questions/28054913/modify-array-of-interface-golang
+	self.treeDispMap["nodes"] = treeRepNodesArr
+	//self.treeDispMap["nodes"] = treeRepNodesArr.(interface{})
 
 	// Go left
-	luuid, lExists := postOrderTraverse(root.link["left"], treeRep)
-	if lExists {
-		*treeRepEdgesArr = append(
-			*treeRepEdgesArr,
-			map[string]interface{}{
-				"source":  root.id,
-				"target":  luuid,
-				"caption": "",
-			},
-		)
-	}
+	luuid, lExists := self.postOrderTraverse(root.link["left"])
 
 	// Go right
-	ruuid, rExists := postOrderTraverse(root.link["right"], treeRep)
-	if rExists {
-		*treeRepEdgesArr = append(
-			*treeRepEdgesArr,
-			map[string]interface{}{
-				"source":  root.id,
-				"target":  ruuid,
-				"caption": "",
-			},
-		)
+	ruuid, rExists := self.postOrderTraverse(root.link["right"])
+
+	// Adding the edges
+	treeRepEdgesArr := self.treeDispMap["edges"].([]map[string]interface{})
+
+	if lExists || rExists {
+		if lExists {
+			treeRepEdgesArr = append(
+				treeRepEdgesArr,
+				map[string]interface{}{
+					"source":  root.id,
+					"target":  luuid,
+					"caption": "",
+				},
+			)
+		}
+
+		if rExists {
+			treeRepEdgesArr = append(
+				treeRepEdgesArr,
+				map[string]interface{}{
+					"source":  root.id,
+					"target":  ruuid,
+					"caption": "",
+				},
+			)
+		}
+
+		//self.treeDispMap["edges"] = treeRepEdgesArr.(interface{})
+		self.treeDispMap["edges"] = treeRepEdgesArr
 	}
 
-	fmt.Println("here")
 	return root.id, true
 }
