@@ -27,7 +27,8 @@ func showGraph(resp http.ResponseWriter, req *http.Request) {
 	} else {
 		fmt.Println("Could not read get parameter, setting default")
 		// Setting a default filePath
-		getFilePath = "assets/data/sample.json"
+		//getFilePath = "assets/data/sample.json"
+		getFilePath = "assets/data/autogen.json"
 	}
 
 	// Using the template
