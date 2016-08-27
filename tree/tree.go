@@ -3,6 +3,7 @@ package tree
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/nu7hatch/gouuid"
 )
 
 type Tree struct {
@@ -10,16 +11,23 @@ type Tree struct {
 	len       int
 	leavesLen int
 	treeType  int
+	id        string
 }
 
 // Module level function
 // TODO: Optional arguments for the treeType
 func CreateTree() *Tree {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		panic("Error generating a new UUID.")
+	}
+
 	return &Tree{
 		root:      nil,
 		len:       0,
 		leavesLen: 0,
 		treeType:  TREE_TYPE_BST,
+		id:        uuid.String(), // This is going to tbe used to debug stuff
 	}
 }
 
