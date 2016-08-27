@@ -188,9 +188,8 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 	ruuid, rExists := self.postOrderTraverse(root.link["right"])
 
 	// Adding the edges
-	treeRepEdgesArr := self.treeDispMap["edges"].([]map[string]interface{})
-
 	if lExists || rExists {
+		treeRepEdgesArr := self.treeDispMap["edges"].([]map[string]interface{})
 		if lExists {
 			treeRepEdgesArr = append(
 				treeRepEdgesArr,
