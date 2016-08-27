@@ -14,8 +14,9 @@ func main() {
 	treeObj.Insert(1)
 	treeObj.Insert(10)
 	treeObj.Insert(7)
-	treeObj.Insert(5)
 	treeObj.Insert(6)
+	treeObj.Insert(12)
+	treeObj.Insert(4)
 
 	jsonResp := treeObj.GetJSONTree()
 	fmt.Println("Format - ", string(jsonResp))

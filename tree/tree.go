@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nu7hatch/gouuid"
+	"strconv"
 )
 
 type Tree struct {
@@ -165,7 +166,7 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 		treeRepNodesArr,
 		map[string]interface{}{
 			"id":      root.id,
-			"caption": "",
+			"caption": strconv.Itoa(root.data.Num),
 			"type":    "",
 		},
 	)
@@ -196,7 +197,7 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 				map[string]interface{}{
 					"source":  root.id,
 					"target":  luuid,
-					"caption": "",
+					"caption": "left",
 				},
 			)
 		}
@@ -207,7 +208,7 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 				map[string]interface{}{
 					"source":  root.id,
 					"target":  ruuid,
-					"caption": "",
+					"caption": "right",
 				},
 			)
 		}
