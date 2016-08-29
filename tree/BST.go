@@ -36,13 +36,18 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 
 // Searching a BST
 func (self *Tree) hasValueBST(node *Node, key interface{}) bool {
+	searchResp := self.getNodeBST(node, key)
+	return searchResp != nil
+}
+
+func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
 	if node == nil {
-		return false
+		return node
 	}
 
 	compareVal := (*self.comparator)(node.data, &key)
 	if compareVal == 0 {
-		return true
+		return node
 	}
 
 	dirn := "left"
@@ -50,5 +55,5 @@ func (self *Tree) hasValueBST(node *Node, key interface{}) bool {
 		dirn = "right"
 	}
 
-	return self.hasValueBST(node.link[dirn], key)
+	return self.getNodeBST(node.link[dirn], key)
 }
