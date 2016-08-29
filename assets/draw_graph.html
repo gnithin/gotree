@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <style>
+            .link {
+                fill: none;
+                stroke: #ccc;
+                stroke-width: 2px;
+            } 
+        </style>
+    </head>
+    <body>
+        <div id="filePath" style="display:None">
+            {{.FilePath}}
+        </div>
+        <div id="viz"></div>
+        <script src="assets/drawFiles/d3.v3.min.js"></script>
+        <script type="text/javascript">
+        var DEFAULT_JSON_FILE_PATH = "assets/data/sample.json"
+
+        /*
+           Found this from - 
+           http://stackoverflow.com/questions/38222685/visualizing-a-parse-tree-with-d3-js
+           https://jsfiddle.net/scsiva1991/22vx8v18/1/
+        */
+		function drawTree(o) {
+		 
+				d3.select("#"+o.divID).select("svg").remove() 
+
+				var viz = d3.select("#"+o.divID)
+					.append("svg")
+					.attr("width", o.width)
+					.attr("height", o.height)  
+
+				var vis = viz.append("g")
+					.attr("id","treeg")
+					.attr("transform", "translate("+ o.padding +","+ o.padding +")") 
+
+				var tree = d3.layout.tree()
+					.size([o.width - (2 * o.padding), o.height - (2 * o.padding)]);
+
+				var diagonal = d3.svg.diagonal()
+					.projection(function(d) { return [d.x, d.y]; });
+
+				var nodes = tree.nodes(o.treeData);
+
+				var link = vis.selectAll("pathlink")
+					.data(tree.links(nodes)).enter()
+					.append("path")
+					.attr("class", "link")
+					.attr("d", diagonal)
+
+				var node = vis.selectAll("g.node")
+					.data(nodes).enter()
+					.append("g")
+					.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+				node.append("circle")
+					.attr("r", 10)
+					.style("fill", function(d) { return (d.children) ? "#E14B3B" : "#1C8B98" });
+
+				node.append("svg:text")
+					.attr("dx", function(d) { return d.children ? 0 : 0; })
+					.attr("dy", function(d) { return d.children ? 5 : 5; })
+					.attr("text-anchor", function(d) { return d.children ? "middle" : "middle"; })
+					.style("fill", "white").text(function(d) { return d.name; })
+			}
+
+            function drawGraphFromFile(filePath){
+                if(typeof(filePath) === "undefined" || filePath.trim() === ""){
+                    filePath = DEFAULT_JSON_FILE_PATH;
+                }
+                console.log("File path - " + filePath);
+                // Get the contents from the file
+				drawTree({divID: 'viz', width: 600, height: 400, padding: 50, 
+					treeData : {"name":'A', "children":[{
+					"name":'P'
+					},
+					{"name":'Q', "children":[{"name":"R"}, {"name":"S"}]}]},
+				})
+            }
+
+            (function (){
+                /*
+                   Fetching the json file specified int he filePath id
+                */
+                var fileElem = document.getElementById("filePath");
+                if(!fileElem || typeof(fileElem) === "undefined"){
+                    console.log("Choosing default");
+                    filePath = DEFAULT_JSON_FILE_PATH;
+                }else{
+                    filePath = fileElem.innerText.trim();
+                }
+                drawGraphFromFile(filePath);
+            })()
+        </script>
+    </body>
+</html>

@@ -32,7 +32,7 @@ func showGraph(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	// Using the template
-	t, templateErr := template.ParseFiles("assets/view_graph.html")
+	t, templateErr := template.ParseFiles("assets/draw_graph.html")
 	fmt.Println("Starting to template!!")
 	if templateErr != nil {
 		fmt.Println("Tempalte error")
