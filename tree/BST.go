@@ -32,3 +32,21 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		parent.AddChild(dirn, newNode)
 	}
 }
+
+// Searching a BST
+func (self *Tree) hasValueBST(node *Node, key int) bool {
+	if node == nil {
+		return false
+	}
+
+	if node.data.Num == key {
+		return true
+	}
+
+	dirn := "left"
+	if node.data.Num < key {
+		dirn = "right"
+	}
+
+	return self.hasValueBST(node.link[dirn], key)
+}

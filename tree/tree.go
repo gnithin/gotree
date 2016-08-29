@@ -50,6 +50,14 @@ func (self *Tree) Insert(newVal int) {
 	fmt.Println("************")
 }
 
+func (self *Tree) HasVal(key int) bool {
+	if self.treeType == TREE_TYPE_BST {
+		return self.hasValueBST(self.root, key)
+	}
+
+	panic("Not implented!")
+}
+
 func (self *Tree) addNode(newNode *Node) {
 	if newNode == nil {
 		panic("Cant handle empty nodes")
