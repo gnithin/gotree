@@ -81,6 +81,10 @@ func (self *Tree) Insert(newVal interface{}) {
 	fmt.Println("************")
 	fmt.Println("Adding - ", newVal)
 	newNode := CreateTreeNode(newVal)
+	// Setting the defaults here
+	newNode.link["left"] = nil
+	newNode.link["right"] = nil
+
 	self.addNode(newNode)
 	fmt.Println("************")
 }
