@@ -10,16 +10,15 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		panic("This shouldn't happen")
 	}
 
-	parentData := parent.data.Num
-	nodeData := newNode.data.Num
+	compareVal := (*self.comparator)(parent.data, newNode.data)
 
-	if parentData == nodeData {
+	if compareVal == 0 {
 		// There's no need to do anything
 		return
 	}
 
 	dirn := "left"
-	if parentData < nodeData {
+	if compareVal == -1 {
 		dirn = "right"
 	}
 
@@ -34,17 +33,18 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 }
 
 // Searching a BST
-func (self *Tree) hasValueBST(node *Node, key int) bool {
+func (self *Tree) hasValueBST(node *Node, key interface{}) bool {
 	if node == nil {
 		return false
 	}
 
-	if node.data.Num == key {
+	compareVal := (*self.comparator)(node.data, &key)
+	if compareVal == 0 {
 		return true
 	}
 
 	dirn := "left"
-	if node.data.Num < key {
+	if compareVal == -1 {
 		dirn = "right"
 	}
 

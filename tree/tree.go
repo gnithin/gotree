@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nu7hatch/gouuid"
-	"strconv"
 )
 
 type Tree struct {
@@ -14,11 +13,30 @@ type Tree struct {
 	treeType    int
 	id          string
 	treeDispMap map[string]interface{}
+	comparator  *func(obj1, obj2 *interface{}) int
 }
 
 // Module level function
 // TODO: Optional arguments for the treeType
+func defaultComparator(obj1, obj2 *interface{}) int {
+	// TODO: better type assertion
+	new_obj1 := (*obj1).(int)
+	new_obj2 := (*obj2).(int)
+
+	if new_obj1 < new_obj2 {
+		return -1
+	} else if new_obj1 > new_obj2 {
+		return 1
+	} else {
+		return 0
+	}
+}
 func CreateTree() *Tree {
+	tempHolder := defaultComparator
+	return CreateTreeWithComparator(&tempHolder)
+}
+
+func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tree {
 	uuid, err := uuid.NewV4()
 	if err != nil {
 		panic("Error generating a new UUID.")
@@ -39,7 +57,9 @@ func CreateTree() *Tree {
 		treeType:    TREE_TYPE_BST,
 		id:          uuid.String(),
 		treeDispMap: tMap,
+		comparator:  comparator,
 	}
+
 }
 
 func (self *Tree) Insert(newVal int) {
@@ -145,7 +165,7 @@ func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
 		treeRepNodesArr,
 		map[string]interface{}{
 			"id":      root.id,
-			"caption": strconv.Itoa(root.data.Num),
+			"caption": root.GetInfoString(),
 			"type":    "",
 		},
 	)
