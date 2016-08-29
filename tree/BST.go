@@ -27,6 +27,7 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		fmt.Println("Going ", dirn)
 		self.insertBST(childNode, newNode)
 	} else {
+		fmt.Println("Inserting at ", dirn)
 		// It needs to be inserted here
 		parent.AddChild(dirn, newNode)
 	}
