@@ -84,6 +84,8 @@ func (self *Tree) Insert(newVal interface{}) {
 	// Setting the defaults here
 	newNode.link["left"] = nil
 	newNode.link["right"] = nil
+	// This will be the default for the root element
+	newNode.link["parent"] = nil
 
 	self.addNode(newNode)
 	fmt.Println("************")
