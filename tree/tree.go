@@ -19,19 +19,46 @@ type Tree struct {
 // Module level function
 // TODO: Optional arguments for the treeType
 func defaultComparator(obj1, obj2 *interface{}) int {
-	// TODO: better type assertion
-	new_obj1 := (*obj1).(int)
-	new_obj2 := (*obj2).(int)
+	// Type assertion only provided for some things
+	switch new_obj1 := (*obj1).(type) {
+	case int:
+		new_obj2 := (*obj2).(int)
+		return intComparator(new_obj1, new_obj2)
+	case string:
+		new_obj2 := (*obj2).(string)
+		return stringComparator(new_obj1, new_obj2)
+	default:
+		panic("City on Fire... City on Fire... Mischief!!!")
+	}
 
-	if new_obj1 < new_obj2 {
+}
+
+// Default integer comparator
+func intComparator(obj1, obj2 int) int {
+	if obj1 < obj2 {
 		return -1
-	} else if new_obj1 > new_obj2 {
+	} else if obj1 > obj2 {
 		return 1
 	} else {
 		return 0
 	}
 }
+
+// Default string comparator
+func stringComparator(obj1, obj2 string) int {
+	if obj1 < obj2 {
+		return -1
+	} else if obj1 > obj2 {
+		return 1
+	} else {
+		return 0
+	}
+}
+
 func CreateTree() *Tree {
+	// TODO: This is a bit dope.
+	// Cannot have pointer to function.
+	// Can have pointer to the container of the function
 	tempHolder := defaultComparator
 	return CreateTreeWithComparator(&tempHolder)
 }
@@ -62,7 +89,7 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tr
 
 }
 
-func (self *Tree) Insert(newVal int) {
+func (self *Tree) Insert(newVal interface{}) {
 	fmt.Println("************")
 	fmt.Println("Adding - ", newVal)
 	newNode := CreateTreeNode(newVal)
@@ -75,7 +102,7 @@ func (self *Tree) HasVal(key int) bool {
 		return self.hasValueBST(self.root, key)
 	}
 
-	panic("Not implented!")
+	panic("Not implemented!")
 }
 
 func (self *Tree) addNode(newNode *Node) {
