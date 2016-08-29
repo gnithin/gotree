@@ -9,15 +9,30 @@ import (
 
 func main() {
 	//tree.CreateTreeNode(1)
-	treeObj := tree.CreateTree()
-	treeObj.Insert(3)
-	treeObj.Insert(5)
-	treeObj.Insert(1)
-	treeObj.Insert(10)
-	treeObj.Insert(7)
-	treeObj.Insert(6)
-	treeObj.Insert(12)
-	treeObj.Insert(4)
+	stringTree := tree.CreateTree()
+	// Testing the strings
+	///*
+	stringTree.Insert("hey")
+	stringTree.Insert("Oh")
+	stringTree.Insert("Listen")
+	stringTree.Insert("what")
+	stringTree.Insert("I")
+	stringTree.Insert("say")
+	stringTree.Insert("Oh")
+	//*/
+
+	// Testing the numbers
+	///*
+	intTree := tree.CreateTree()
+	intTree.Insert(3)
+	intTree.Insert(5)
+	intTree.Insert(1)
+	intTree.Insert(10)
+	intTree.Insert(7)
+	intTree.Insert(6)
+	intTree.Insert(12)
+	intTree.Insert(4)
+	//*/
 
 	/*
 		checkHasVal := []int{

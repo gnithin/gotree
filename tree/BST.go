@@ -14,6 +14,7 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 
 	if compareVal == 0 {
 		// There's no need to do anything
+		fmt.Println("Already found that value. Doing nothing")
 		return
 	}
 
