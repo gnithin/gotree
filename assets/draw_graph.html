@@ -70,13 +70,28 @@
                     filePath = DEFAULT_JSON_FILE_PATH;
                 }
                 console.log("File path - " + filePath);
-                // Get the contents from the file
-				drawTree({divID: 'viz', width: 600, height: 400, padding: 50, 
-					treeData : {"name":'A', "children":[{
-					"name":'P'
-					},
-					{"name":'Q', "children":[{"name":"R"}, {"name":"S"}]}]},
-				})
+                makeReq(filePath)
+            }
+
+            function makeReq(url) {
+              // Don't bother with making this too neat for now.
+              // Just basically get it working
+              var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                  var respTest = xhttp.responseText;
+                  var treeContents = JSON.parse(respTest)
+                  drawTree({
+                      divID: 'viz', 
+                      width: 600, 
+                      height: 400, 
+                      padding: 50, 
+                      treeData : treeContents
+                  });
+                }
+              };
+              xhttp.open("GET", url, true);
+              xhttp.send();
             }
 
             (function (){
