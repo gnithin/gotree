@@ -24,7 +24,8 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 	}
 
 	childNode, isExists := parent.link[dirn]
-	if isExists {
+	// isExists needn't be checked. It can be safely removed
+	if isExists && childNode != nil {
 		fmt.Println("Going ", dirn)
 		self.insertBST(childNode, newNode)
 	} else {
@@ -35,7 +36,7 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		// Adding a parent
 		_, isExists := newNode.link["parent"]
 		if !isExists {
-			childPtr.link["parent"] = parent
+			newNode.link["parent"] = parent
 		}
 	}
 }
@@ -73,7 +74,7 @@ func (self *Tree) removeBST(node *Node, key interface{}) bool {
 
 	// This will only work if there's a parent key
 	parentNode, IsParentKey := nodeResp.link["parent"]
-	if !keyExists {
+	if !IsParentKey {
 		panic("The parent key in the nodes must be enabled for the removal to work!!! The alternative has not been implemented!")
 	}
 	var parentDirn string
@@ -124,4 +125,5 @@ func (self *Tree) removeBST(node *Node, key interface{}) bool {
 		// Both are not nil.
 		// TODO: this is a bit tricky
 	}
+	return false
 }
