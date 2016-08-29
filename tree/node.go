@@ -28,12 +28,6 @@ func (n *Node) GetInfoString() string {
 
 func (n *Node) AddChild(key string, childPtr *Node) {
 	n.link[key] = childPtr
-	// TODO: Think of what to do with this block
-	// Adding a parent anyways
-	_, isExists := childPtr.link["parent"]
-	if !isExists {
-		childPtr.link["parent"] = n
-	}
 }
 
 /*

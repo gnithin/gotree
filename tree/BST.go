@@ -31,6 +31,12 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		fmt.Println("Inserting at ", dirn)
 		// It needs to be inserted here
 		parent.AddChild(dirn, newNode)
+
+		// Adding a parent
+		_, isExists := newNode.link["parent"]
+		if !isExists {
+			childPtr.link["parent"] = parent
+		}
 	}
 }
 
