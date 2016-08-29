@@ -68,40 +68,11 @@ func (self *Tree) addNodeBST(newNode *Node) {
 		fmt.Println("Adding root")
 		self.root = newNode
 	} else {
-		insertBST(self.root, newNode)
+		self.insertBST(self.root, newNode)
 	}
 
 	// Increment stuff
 	self.len += 1
-}
-
-// Insert into BST
-func insertBST(parent *Node, newNode *Node) {
-	if parent == nil {
-		panic("This shouldn't happen")
-	}
-
-	parentData := parent.data.Num
-	nodeData := newNode.data.Num
-
-	if parentData == nodeData {
-		// There's no need to do anything
-		return
-	}
-
-	dirn := "left"
-	if parentData < nodeData {
-		dirn = "right"
-	}
-
-	childNode, isExists := parent.link[dirn]
-	if isExists {
-		fmt.Println("Going ", dirn)
-		insertBST(childNode, newNode)
-	} else {
-		// It needs to be inserted here
-		parent.AddChild(dirn, newNode)
-	}
 }
 
 // Creates a JSON output for the current tree as specified by alchemy
