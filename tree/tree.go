@@ -6,11 +6,16 @@ import (
 	"github.com/nu7hatch/gouuid"
 )
 
+type Tree interface {
+	Insert(interface{})
+	HasVal(*Node, interface{}) bool
+	Remove(interface{}) bool
+}
+
 type BaseTree struct {
 	root        *Node
 	len         int
 	leavesLen   int
-	treeType    int
 	id          string
 	treeDispMap map[string]interface{}
 	comparator  *func(obj1, obj2 *interface{}) int
@@ -64,7 +69,6 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Ba
 		root:        nil,
 		len:         0,
 		leavesLen:   0,
-		treeType:    TREE_TYPE_BST,
 		id:          uuid.String(),
 		treeDispMap: tMap,
 		comparator:  comparator,
@@ -72,52 +76,12 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Ba
 
 }
 
-func (self *BaseTree) Insert(newVal interface{}) {
-	fmt.Println("************")
-	fmt.Println("Adding - ", newVal)
-	newNode := CreateTreeNode(&newVal)
-
-	// Setting the defaults here
-	newNode.link["left"] = nil
-	newNode.link["right"] = nil
-	// This will be the default for the root element
-	newNode.link["parent"] = nil
-
-	self.addNode(newNode)
-	fmt.Println("************")
+func CreateBST() *BST {
+	return CreateBSTWithComparator(nil)
 }
 
-func (self *BaseTree) Remove(val interface{}) bool {
-	removeStatus := self.removeValBST(val)
-	fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++")
-	if !removeStatus {
-		fmt.Println("Not able to remove -", val)
-	} else {
-		fmt.Println("Removed -", val)
-	}
-	fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++")
-	return removeStatus
-}
-
-func (self *BaseTree) HasVal(key interface{}) bool {
-	if self.treeType == TREE_TYPE_BST {
-		return self.hasValueBST(self.root, key)
-	}
-
-	panic("Not implemented!")
-}
-
-func (self *BaseTree) addNode(newNode *Node) {
-	if newNode == nil {
-		panic("Cant handle empty nodes")
-	}
-
-	switch self.treeType {
-	case TREE_TYPE_BST:
-		self.addNodeBST(newNode)
-	default:
-		panic("Not impletemented this add node")
-	}
+func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST {
+	return &BST{*(CreateTreeWithComparator(comparator))}
 }
 
 func (self *BaseTree) checkTypeForComparator(node *Node) {
@@ -138,19 +102,6 @@ func (self *BaseTree) checkTypeForComparator(node *Node) {
 			panic("Need to specify comparator if the type is not string or int")
 		}
 	}
-}
-
-func (self *BaseTree) addNodeBST(newNode *Node) {
-	if self.root == nil {
-		self.checkTypeForComparator(newNode)
-		fmt.Println("Adding root")
-		self.root = newNode
-	} else {
-		self.insertBST(self.root, newNode)
-	}
-
-	// Increment stuff
-	self.len += 1
 }
 
 // Creates a JSON output for the current tree as specified by alchemy
