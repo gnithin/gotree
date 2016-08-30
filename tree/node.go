@@ -44,34 +44,15 @@ func (n *Node) String() string {
 }
 
 func (n *Node) GetInfoString() string {
-	return self.String()
+	return n.String()
 }
 
 func (n *Node) AddChild(key string, childPtr *Node) {
 	n.link[key] = childPtr
 }
 
-/*
-Creates a Tree node that can be added to the tree
-TODO; This abstraction is needed now because, not sure
-how to  make this more general. Probably use something like
-an interface{}
-*/
-func CreateTreeNode(n interface{}) *Node {
-	//customData := createTreeData(n)
-	//return makeNode(customData)
-	return makeNode(&n)
-}
-
-// TODO: This is not needed. Remove this -
-// CreateCustomData creates Tree data populated from the argument and
-// returns a reference to the customData
-func createTreeData(n int) *customData {
-	return &customData{n}
-}
-
 // Creates a node
-func makeNode(data *interface{}) *Node {
+func CreateTreeNode(data *interface{}) *Node {
 	uuid, err := uuid.NewV4()
 	if err != nil {
 		panic("Error generating a new UUID.")

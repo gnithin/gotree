@@ -43,11 +43,6 @@ func stringComparator(obj1, obj2 *interface{}) int {
 }
 
 func CreateTree() *Tree {
-	// TODO: This is a bit dope.
-	// Cannot have pointer to function.
-	// Can have pointer to the container of the function
-	//tempHolder := defaultComparator
-	//return CreateTreeWithComparator(&tempHolder)
 	return CreateTreeWithComparator(nil)
 }
 
@@ -80,7 +75,8 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tr
 func (self *Tree) Insert(newVal interface{}) {
 	fmt.Println("************")
 	fmt.Println("Adding - ", newVal)
-	newNode := CreateTreeNode(newVal)
+	newNode := CreateTreeNode(&newVal)
+
 	// Setting the defaults here
 	newNode.link["left"] = nil
 	newNode.link["right"] = nil
