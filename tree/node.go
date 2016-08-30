@@ -6,15 +6,10 @@ import (
 	"strings"
 )
 
-type customData struct {
-	Num int
-}
-type customMap map[string]*Node
-
 type Node struct {
 	id   string
 	data *interface{}
-	link customMap
+	link map[string]*Node
 }
 
 func (n *Node) String() string {
