@@ -66,21 +66,23 @@ func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
 }
 
 // Removing an element from a BST
-func (self *Tree) removeBST(node *Node, key interface{}) bool {
+func (self *Tree) RemoveValBST(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
+		fmt.Println("Cannot find the required key to remove")
 		return false
 	}
 
-	// This will only work if there's a parent key
 	parentNode, IsParentKey := nodeResp.link["parent"]
 	if !IsParentKey {
 		panic("The parent key in the nodes must be enabled for the removal to work!!! The alternative has not been implemented!")
 	}
-	var parentDirn string
-	parentDirn = ""
+
+	// NOTE: ParentDirn should only be used whenever there is a parentNode available
+	// Enforce that
+	parentDirn := ""
 	if parentNode != nil {
-		if parentNode.link["left"] == node {
+		if parentNode.link["left"] == nodeResp {
 			// it's the left kid
 			parentDirn = "left"
 		} else {
@@ -92,29 +94,25 @@ func (self *Tree) removeBST(node *Node, key interface{}) bool {
 	rightNode, IsRightKey := nodeResp.link["right"]
 
 	if !IsLeftKey || !IsRightKey {
-		// TODO: Better error message
-		panic("This shouldn't be happening!!!! Arrrrgh!!!!")
+		panic("The left and right key in the nodes must be enabled for the removal to work!!!")
 	}
 
+	// The actual logic of the removal starts here
 	if leftNode == nil && rightNode == nil {
 		// If it's the root, then just nuke it
 		if parentNode == nil {
 			self.root = nil
 		} else {
-			// Remove this thing from the parent.
-			// Find out what child of the parent it is
 			parentNode.link[parentDirn] = nil
 		}
-		// TODO: DEstroy node
 	} else if leftNode == nil || rightNode == nil {
 		nonEmptyNode := leftNode
 		if leftNode == nil {
 			nonEmptyNode = rightNode
 		}
-		// Either one are nil
+
 		// Just make the pointer of the non-empty side point to the parent
 		if parentNode == nil {
-			// It's the root. Handle it differently
 			self.root = nonEmptyNode
 			nonEmptyNode.link["parent"] = nil
 		} else {
@@ -122,8 +120,42 @@ func (self *Tree) removeBST(node *Node, key interface{}) bool {
 			nonEmptyNode.link["parent"] = parentNode
 		}
 	} else {
-		// Both are not nil.
-		// TODO: this is a bit tricky
+		// Both the children exist
+		lrNode, lrExists := leftNode.link["right"]
+
+		if !lrExists {
+			panic("The left and right key in the nodes must be enabled for the removal to work!!!")
+		}
+
+		// Attach lr to the left of the leftmost child of right node of r
+		if lrNode != nil {
+			// Getting the leftMostRightNode
+			leftMostRightNode := rightNode
+			for leftMostRightNode.link["left"] != nil {
+				leftMostRightNode = leftMostRightNode.link["left"]
+			}
+
+			leftMostRightNode.link["left"] = lrNode
+			lrNode.link["parent"] = leftMostRightNode
+		}
+
+		leftNode.link["right"] = rightNode
+		rightNode.link["parent"] = leftNode
+
+		if parentNode == nil {
+			self.root = leftNode
+			leftNode.link["parent"] = nil
+		} else {
+			leftNode.link["parent"] = parentNode
+			parentNode.link[parentDirn] = leftNode
+		}
 	}
-	return false
+
+	// Removing all references from the node to be deleted
+	// This is just for safety purposes
+	nodeResp.link["left"] = nil
+	nodeResp.link["right"] = nil
+	nodeResp.link["parent"] = nil
+
+	return true
 }

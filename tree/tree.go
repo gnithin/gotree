@@ -91,6 +91,10 @@ func (self *Tree) Insert(newVal interface{}) {
 	fmt.Println("************")
 }
 
+func (self *Tree) Remove(val interface{}) bool {
+	return self.removeValBST(val)
+}
+
 func (self *Tree) HasVal(key int) bool {
 	if self.treeType == TREE_TYPE_BST {
 		return self.hasValueBST(self.root, key)
