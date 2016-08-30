@@ -46,7 +46,7 @@ func (self *BST) insertBST(parent *Node, newNode *Node) {
 	} else {
 		fmt.Println("Inserting at ", dirn)
 		// It needs to be inserted here
-		parent.AddChild(dirn, newNode)
+		parent.link[dirn] = newNode
 
 		// Adding a parent
 		newNode.link["parent"] = parent

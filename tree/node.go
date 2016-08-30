@@ -47,10 +47,6 @@ func (n *Node) GetInfoString() string {
 	return n.String()
 }
 
-func (n *Node) AddChild(key string, childPtr *Node) {
-	n.link[key] = childPtr
-}
-
 // Creates a node
 func CreateTreeNode(data *interface{}) *Node {
 	uuid, err := uuid.NewV4()
