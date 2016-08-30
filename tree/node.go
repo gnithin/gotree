@@ -3,6 +3,7 @@ package tree
 import (
 	"fmt"
 	"github.com/nu7hatch/gouuid"
+	"strings"
 )
 
 type customData struct {
@@ -16,14 +17,34 @@ type Node struct {
 	link customMap
 }
 
-// TODO: Stackoverflow when using cycles, as when using parent key
 func (n *Node) String() string {
-	return fmt.Sprintf("Data: %d\nMap: {\n%s\n}\n", n.data, n.link)
+	// only display the keys which have values
+	keysList := []string{
+		"left", "right", "parent",
+	}
+	var validKeyList []string
+
+	for _, key := range keysList {
+		_, isExists := n.link[key]
+		if isExists {
+			validKeyList = append(
+				validKeyList,
+				key,
+			)
+		}
+	}
+
+	mapString := "No Valid maps"
+	validKeyStr := strings.Join(validKeyList, " ")
+	if validKeyStr != "" {
+		mapString = "Valid maps - " + validKeyStr
+	}
+
+	return fmt.Sprintf("Data: %d\nMap: \n%s\n", n.data, mapString)
 }
 
 func (n *Node) GetInfoString() string {
-	// TODO: fix this
-	return fmt.Sprintf("Data")
+	return self.String()
 }
 
 func (n *Node) AddChild(key string, childPtr *Node) {
