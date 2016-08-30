@@ -103,7 +103,7 @@ func (self *Tree) Remove(val interface{}) bool {
 	return removeStatus
 }
 
-func (self *Tree) HasVal(key int) bool {
+func (self *Tree) HasVal(key interface{}) bool {
 	if self.treeType == TREE_TYPE_BST {
 		return self.hasValueBST(self.root, key)
 	}
