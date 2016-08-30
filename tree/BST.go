@@ -5,7 +5,7 @@ import (
 )
 
 // Insert into BST
-func (self *Tree) insertBST(parent *Node, newNode *Node) {
+func (self *BaseTree) insertBST(parent *Node, newNode *Node) {
 	if parent == nil {
 		panic("This shouldn't happen")
 	}
@@ -39,12 +39,12 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 }
 
 // Searching a BST
-func (self *Tree) hasValueBST(node *Node, key interface{}) bool {
+func (self *BaseTree) hasValueBST(node *Node, key interface{}) bool {
 	searchResp := self.getNodeBST(node, key)
 	return searchResp != nil
 }
 
-func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
+func (self *BaseTree) getNodeBST(node *Node, key interface{}) *Node {
 	if node == nil {
 		return node
 	}
@@ -63,7 +63,7 @@ func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
 }
 
 // Removing an element from a BST
-func (self *Tree) removeValBST(key interface{}) bool {
+func (self *BaseTree) removeValBST(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
 		fmt.Println("Cannot find the required key to remove")

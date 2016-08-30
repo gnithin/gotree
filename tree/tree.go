@@ -6,7 +6,7 @@ import (
 	"github.com/nu7hatch/gouuid"
 )
 
-type Tree struct {
+type BaseTree struct {
 	root        *Node
 	len         int
 	leavesLen   int
@@ -42,11 +42,11 @@ func stringComparator(obj1, obj2 *interface{}) int {
 	}
 }
 
-func CreateTree() *Tree {
+func CreateTree() *BaseTree {
 	return CreateTreeWithComparator(nil)
 }
 
-func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tree {
+func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BaseTree {
 	uuid, err := uuid.NewV4()
 	if err != nil {
 		panic("Error generating a new UUID.")
@@ -60,7 +60,7 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tr
 		"edges": edgesArr,
 	}
 
-	return &Tree{
+	return &BaseTree{
 		root:        nil,
 		len:         0,
 		leavesLen:   0,
@@ -72,7 +72,7 @@ func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Tr
 
 }
 
-func (self *Tree) Insert(newVal interface{}) {
+func (self *BaseTree) Insert(newVal interface{}) {
 	fmt.Println("************")
 	fmt.Println("Adding - ", newVal)
 	newNode := CreateTreeNode(&newVal)
@@ -87,7 +87,7 @@ func (self *Tree) Insert(newVal interface{}) {
 	fmt.Println("************")
 }
 
-func (self *Tree) Remove(val interface{}) bool {
+func (self *BaseTree) Remove(val interface{}) bool {
 	removeStatus := self.removeValBST(val)
 	fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++")
 	if !removeStatus {
@@ -99,7 +99,7 @@ func (self *Tree) Remove(val interface{}) bool {
 	return removeStatus
 }
 
-func (self *Tree) HasVal(key interface{}) bool {
+func (self *BaseTree) HasVal(key interface{}) bool {
 	if self.treeType == TREE_TYPE_BST {
 		return self.hasValueBST(self.root, key)
 	}
@@ -107,7 +107,7 @@ func (self *Tree) HasVal(key interface{}) bool {
 	panic("Not implemented!")
 }
 
-func (self *Tree) addNode(newNode *Node) {
+func (self *BaseTree) addNode(newNode *Node) {
 	if newNode == nil {
 		panic("Cant handle empty nodes")
 	}
@@ -120,7 +120,7 @@ func (self *Tree) addNode(newNode *Node) {
 	}
 }
 
-func (self *Tree) checkTypeForComparator(node *Node) {
+func (self *BaseTree) checkTypeForComparator(node *Node) {
 	// Just check if there's a comparator specified
 	// Find the type. If the type is either a string or an int,
 	// add the default comparator. Else raise error
@@ -140,7 +140,7 @@ func (self *Tree) checkTypeForComparator(node *Node) {
 	}
 }
 
-func (self *Tree) addNodeBST(newNode *Node) {
+func (self *BaseTree) addNodeBST(newNode *Node) {
 	if self.root == nil {
 		self.checkTypeForComparator(newNode)
 		fmt.Println("Adding root")
@@ -154,7 +154,7 @@ func (self *Tree) addNodeBST(newNode *Node) {
 }
 
 // Creates a JSON output for the current tree as specified by alchemy
-func (self *Tree) GetJSONTree() []byte {
+func (self *BaseTree) GetJSONBaseTree() []byte {
 	self.postOrderTraverse(self.root)
 	fmt.Println(self.treeDispMap)
 
@@ -183,7 +183,7 @@ func (self *Tree) GetJSONTree() []byte {
 - Traverse in post order, when visiting every child, add the node.
 - When visiting every root, add the edge
 */
-func (self *Tree) postOrderTraverse(root *Node) (string, bool) {
+func (self *BaseTree) postOrderTraverse(root *Node) (string, bool) {
 	/*
 		The resulting structure needs to be of this format -
 		{
