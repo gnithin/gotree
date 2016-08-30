@@ -54,8 +54,8 @@ func (self *BST) insertBST(parent *Node, newNode *Node) {
 }
 
 // Searching a BST
-func (self *BST) HasVal(node *Node, key interface{}) bool {
-	searchResp := self.getNodeBST(node, key)
+func (self *BST) HasVal(key interface{}) bool {
+	searchResp := self.getNodeBST(self.root, key)
 	return searchResp != nil
 }
 

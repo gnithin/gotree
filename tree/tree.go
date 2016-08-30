@@ -105,7 +105,7 @@ func (self *BaseTree) checkTypeForComparator(node *Node) {
 }
 
 // Creates a JSON output for the current tree as specified by alchemy
-func (self *BaseTree) GetJSONBaseTree() []byte {
+func (self *BaseTree) GetJSONTree() []byte {
 	self.postOrderTraverse(self.root)
 	fmt.Println(self.treeDispMap)
 
