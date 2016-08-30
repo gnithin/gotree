@@ -34,10 +34,7 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 		parent.AddChild(dirn, newNode)
 
 		// Adding a parent
-		_, isExists := newNode.link["parent"]
-		if !isExists {
-			newNode.link["parent"] = parent
-		}
+		newNode.link["parent"] = parent
 	}
 }
 
@@ -66,7 +63,7 @@ func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
 }
 
 // Removing an element from a BST
-func (self *Tree) RemoveValBST(key interface{}) bool {
+func (self *Tree) removeValBST(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
 		fmt.Println("Cannot find the required key to remove")

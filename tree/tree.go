@@ -92,7 +92,15 @@ func (self *Tree) Insert(newVal interface{}) {
 }
 
 func (self *Tree) Remove(val interface{}) bool {
-	return self.removeValBST(val)
+	removeStatus := self.removeValBST(val)
+	fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++")
+	if !removeStatus {
+		fmt.Println("Not able to remove -", val)
+	} else {
+		fmt.Println("Removed -", val)
+	}
+	fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++")
+	return removeStatus
 }
 
 func (self *Tree) HasVal(key int) bool {
