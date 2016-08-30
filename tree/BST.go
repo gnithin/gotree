@@ -4,8 +4,23 @@ import (
 	"fmt"
 )
 
+type BST struct {
+	BaseTree
+}
+
+func (self *BST) Insert(newVal interface{}) {
+	newNode := CreateTreeNode(&newVal)
+	if self.root == nil {
+		self.checkTypeForComparator(newNode)
+		self.root = newNode
+	} else {
+		self.insertBST(self.root, newNode)
+	}
+	self.len += 1
+}
+
 // Insert into BST
-func (self *Tree) insertBST(parent *Node, newNode *Node) {
+func (self *BST) insertBST(parent *Node, newNode *Node) {
 	if parent == nil {
 		panic("This shouldn't happen")
 	}
@@ -39,12 +54,12 @@ func (self *Tree) insertBST(parent *Node, newNode *Node) {
 }
 
 // Searching a BST
-func (self *Tree) hasValueBST(node *Node, key interface{}) bool {
-	searchResp := self.getNodeBST(node, key)
+func (self *BST) HasVal(key interface{}) bool {
+	searchResp := self.getNodeBST(self.root, key)
 	return searchResp != nil
 }
 
-func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
+func (self *BST) getNodeBST(node *Node, key interface{}) *Node {
 	if node == nil {
 		return node
 	}
@@ -63,7 +78,7 @@ func (self *Tree) getNodeBST(node *Node, key interface{}) *Node {
 }
 
 // Removing an element from a BST
-func (self *Tree) removeValBST(key interface{}) bool {
+func (self *BST) Remove(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
 		fmt.Println("Cannot find the required key to remove")

@@ -57,9 +57,14 @@ func CreateTreeNode(data *interface{}) *Node {
 	if err != nil {
 		panic("Error generating a new UUID.")
 	}
+
 	return &Node{
 		id:   uuid.String(),
 		data: data,
-		link: make(map[string]*Node),
+		link: map[string]*Node{
+			"left":   nil,
+			"right":  nil,
+			"parent": nil,
+		},
 	}
 }
