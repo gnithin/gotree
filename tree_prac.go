@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	//"gotree/helpers"
+	"gotree/helpers"
 	tree "gotree/tree"
-	//"io/ioutil"
+	"io/ioutil"
 )
 
 type myObject struct {
@@ -34,7 +34,8 @@ func main() {
 	}
 
 	//customObjTree := tree.CreateTree()
-	customObjTree := tree.CreateTreeWithComparator(&comparatorFunc)
+	///*
+	customObjTree := tree.CreateBSTWithComparator(&comparatorFunc)
 	customObjTree.Insert(myObject{name: "james", age: 51, sal: 230.000})
 	customObjTree.Insert(myObject{name: "mustaine", age: 55, sal: 140.000})
 	customObjTree.Insert(myObject{name: "tom", age: 20, sal: 1240.000})
@@ -43,7 +44,7 @@ func main() {
 
 	// Testing the strings
 	///*
-	stringTree := tree.CreateTree()
+	stringTree := tree.CreateBST()
 	stringTree.Insert("hey")
 	stringTree.Insert("Oh")
 	stringTree.Insert("Listen")
@@ -55,7 +56,7 @@ func main() {
 
 	// Testing the numbers
 	///*
-	intTree := tree.CreateTree()
+	intTree := tree.CreateBST()
 	intTree.Insert(3)
 	intTree.Insert(5)
 	intTree.Insert(1)
@@ -83,23 +84,23 @@ func main() {
 		fmt.Printf("Checking if %d is in the tree - %v\n", val, intTree.HasVal(val))
 	}
 
-	/*
-		jsonResp := intTree.GetJSONTree()
-		fmt.Println("Format - ", string(jsonResp))
+	///*
+	jsonResp := intTree.GetJSONTree()
+	fmt.Println("Format - ", string(jsonResp))
 
-		// write json to file
-			destFileName := "autogen.json"
-			destFilePath := "assets/data/" + destFileName
-			writeErr := ioutil.WriteFile(destFilePath, jsonResp, 0644)
-			if writeErr != nil {
-				fmt.Println(writeErr)
-				panic("Error writing json to file")
-			} else {
-				fmt.Println("Written to ", destFilePath)
-			}
+	// write json to file
+	destFileName := "autogen.json"
+	destFilePath := "assets/data/" + destFileName
+	writeErr := ioutil.WriteFile(destFilePath, jsonResp, 0644)
+	if writeErr != nil {
+		fmt.Println(writeErr)
+		panic("Error writing json to file")
+	} else {
+		fmt.Println("Written to ", destFilePath)
+	}
 
-			// Needed to display the graph
-			// TODO: Uncomment please
-			//helpers.CreateServer()
-			//*/
+	// Needed to display the graph
+	// TODO: Uncomment please
+	helpers.CreateServer()
+	//*/
 }
