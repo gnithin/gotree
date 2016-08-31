@@ -7,12 +7,20 @@ type locationNode struct {
 }
 
 type nextLocationQueue struct {
-	front *locationNode
-	rear  *locationNode
+	front      *locationNode
+	rear       *locationNode
+	lastPopped *locationNode
 }
 
 func (q *nextLocationQueue) isEmpty() bool {
 	return q.front == nil && q.front == q.rear
+}
+
+func (q *nextLocationQueue) insertFront(locPtr *locationNode) {
+	if q.front != nil {
+		fNode := q.front
+		fNode.nextPtr = locPtr
+	}
 }
 
 func (q *nextLocationQueue) push(nodePtr *Node, dirn string) {
@@ -93,7 +101,39 @@ func (self *Heap) Insert(newVal interface{}) {
 
 func (self *Heap) reheapUp(node *Node) {
 	// Compare the present node with it's parent
+	parentNode := node.link["parent"]
+	for parentNode != nil {
+		if !self.isSizer(parentNode.data, node.data) {
+			self.swapData(parentNode, node)
+			node = parentNode
+			parentNode = node.link["parent"]
+		} else {
+			break
+		}
+	}
+}
 
+func (self *Heap) swapData(node1, node2 *Node) {
+	// Do not mess arround with the link pointers
+	// Just change the data section
+	tempData := node1.data
+	node1.data = node2.data
+	node2.data = tempData
+}
+
+func (self *Heap) isSizer(obj1, obj2 *interface{}) {
+	compareResp := self.comparator(obj1, obj2)
+	if self.isMaxHeap {
+		// obj1 >= obj2
+		if compareResp >= 0 {
+			return true
+		}
+	} else {
+		if compareResp <= 0 {
+			return true
+		}
+	}
+	return false
 }
 
 func (self *Heap) Pop() (*interface{}, bool) {
