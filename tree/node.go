@@ -12,6 +12,25 @@ type Node struct {
 	link map[string]*Node
 }
 
+func (n *Node) isDirn(dirn string) bool {
+	if n != nil {
+		parentNode, isExists := n.link["parent"]
+		if isExists && parentNode != nil {
+			return parentNode.link[dirn] == n
+		}
+	}
+
+	return false
+}
+
+func (n *Node) IsLeft() bool {
+	return n.isDirn("left")
+}
+
+func (n *Node) IsRight() bool {
+	return n.isDirn("right")
+}
+
 func (n *Node) String() string {
 	// only display the keys which have values
 	keysList := []string{
