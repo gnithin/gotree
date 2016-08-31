@@ -22,6 +22,11 @@ type BaseTree struct {
 	comparator  *func(obj1, obj2 *interface{}) int
 }
 
+type BaseSequentialTree struct {
+	BaseTree
+	nodeArr []*Node
+}
+
 // Default integer comparator
 func intComparator(obj1, obj2 *interface{}) int {
 	new_obj1 := (*obj1).(int)
