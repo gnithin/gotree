@@ -85,6 +85,14 @@ func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST
 	return &BST{*(CreateTreeWithComparator(comparator))}
 }
 
+func CreateHeap() *Heap {
+	return CreateHeapWithComparator(nil)
+}
+
+func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
+	return &Heap{*(CreateTreeWithComparator(comparator))}
+}
+
 func (self *BaseTree) checkTypeForComparator(node *Node) {
 	// Just check if there's a comparator specified
 	// Find the type. If the type is either a string or an int,
