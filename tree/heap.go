@@ -121,16 +121,18 @@ func (self *Heap) swapData(node1, node2 *Node) {
 	node2.data = tempData
 }
 
-func (self *Heap) isSizer(obj1, obj2 *interface{}) {
-	compareResp := self.comparator(obj1, obj2)
-	if self.isMaxHeap {
-		// obj1 >= obj2
-		if compareResp >= 0 {
-			return true
-		}
-	} else {
-		if compareResp <= 0 {
-			return true
+func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
+	if self.comparator != nil {
+		compareResp := (*self.comparator)(obj1, obj2)
+		if self.isMaxHeap {
+			// obj1 >= obj2
+			if compareResp >= 0 {
+				return true
+			}
+		} else {
+			if compareResp <= 0 {
+				return true
+			}
 		}
 	}
 	return false
