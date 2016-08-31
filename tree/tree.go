@@ -10,6 +10,7 @@ type Tree interface {
 	Insert(interface{})
 	HasVal(*Node, interface{}) bool
 	Remove(interface{}) bool
+	Pop() (*interface{}, bool)
 }
 
 type BaseTree struct {

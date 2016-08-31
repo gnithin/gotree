@@ -77,6 +77,17 @@ func (self *BST) getNodeBST(node *Node, key interface{}) *Node {
 	return self.getNodeBST(node.link[dirn], key)
 }
 
+func (self *BST) Pop() (*interface{}, bool) {
+	// Popping the root element
+	if self.root != nil {
+		rootData := self.root.data
+		if self.Remove(*rootData) {
+			return rootData, true
+		}
+	}
+	return nil, false
+}
+
 // Removing an element from a BST
 func (self *BST) Remove(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)

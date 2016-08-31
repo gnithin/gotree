@@ -40,6 +40,14 @@ func main() {
 	customObjTree.Insert(myObject{name: "mustaine", age: 55, sal: 140.000})
 	customObjTree.Insert(myObject{name: "tom", age: 20, sal: 1240.000})
 	customObjTree.Insert(myObject{name: "jerry", age: 11, sal: 1140.000})
+
+	poppedObj, isPoppedExists := customObjTree.Pop()
+	if isPoppedExists {
+		fmt.Println((*poppedObj).(myObject))
+	} else {
+		fmt.Println("Pop failed!")
+	}
+
 	//*/
 
 	// Testing the strings
