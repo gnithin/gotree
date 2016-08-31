@@ -1,7 +1,22 @@
 package tree
 
+// This can be a simple array
+type nextLocation struct {
+	nodePtr *Node
+	dirn    string
+}
+
 type Heap struct {
 	BaseTree
+	nextLoc []*nextLocation
+}
+
+func makeHeap(b *BaseTree) *Heap {
+	var nextLoc []*nextLocation
+	return &Heap{
+		*b,
+		nextLoc,
+	}
 }
 
 func Insert(interface{}) {

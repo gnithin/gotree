@@ -90,7 +90,7 @@ func CreateHeap() *Heap {
 }
 
 func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
-	return &Heap{*(CreateTreeWithComparator(comparator))}
+	return makeHeap(CreateTreeWithComparator(comparator))
 }
 
 func (self *BaseTree) checkTypeForComparator(node *Node) {
