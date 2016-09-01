@@ -98,6 +98,34 @@ type BaseSequentialTree struct {
 	nodeArr []*Node
 }
 
+func (self *BaseSequentialTree) getParentIndex(childIndex int) int {
+	if childIndex <= 0 {
+		panic("Tree index cannot be <= 0")
+	}
+
+	return (childIndex - 1) / 2
+}
+
+func (self *BaseSequentialTree) getChildIndex(parentIndex int, isLeft bool) int {
+	if parentIndex < 0 {
+		panic("Tree index cannot be < 0")
+	}
+
+	inc := 1
+	if !isLeft {
+		inc = 2
+	}
+	return (2 * parentIndex) + inc
+}
+
+func (self *BaseSequentialTree) isLeftChild(childIndex int) bool {
+	if childIndex <= 0 {
+		panic("Tree index cannot be <= 0")
+	}
+
+	return (childIndex % 2) != 0
+}
+
 func (self *BaseTree) checkTypeForComparator(node *Node) {
 	// Just check if there's a comparator specified
 	// Find the type. If the type is either a string or an int,
