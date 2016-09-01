@@ -130,16 +130,31 @@ func (self *Heap) Pop() (*interface{}, bool) {
 	if self.len == 0 {
 		return nil, false
 	}
-
-	fmt.Println("Removing - ", self.root)
 	lastElementIndex := self.nextInsertIndex - 1
 	respData := *self.root.data
 
 	// Remove the last element
 	lastElement := self.nodeArr[lastElementIndex]
+
 	self.swapData(lastElement, self.nodeArr[DEFAULT_ROOT_INDEX])
+
 	self.nodeArr[lastElementIndex] = nil
+
+	// Clean up the node references as well.
+	lastElement.link["left"] = nil
+	lastElement.link["right"] = nil
+
+	lastElementParent, isParentExists := lastElement.link["parent"]
+	if isParentExists && lastElementParent != nil {
+		parDirn := "right"
+		if self.isLeftChild(lastElementIndex) {
+			parDirn = "left"
+		}
+		lastElementParent.link[parDirn] = nil
+	}
+
 	self.len -= 1
+	self.nextInsertIndex -= 1
 
 	// Reheap down
 	self.reheapDown()
