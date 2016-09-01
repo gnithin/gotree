@@ -38,7 +38,11 @@ func (self *Heap) String() string {
 	if self.isMaxHeap {
 		heapType = "MaxHeap"
 	}
-	return fmt.Sprintf("Heap Size: %d\nHeap Type: %s\nTree:\n%v\n", self.maxSize, heapType, &self.BaseSequentialTree)
+	return fmt.Sprintf("Heap Size: %d\nHeap len: %d\nHeap Type: %s\nTree:\n%v\n",
+		self.maxSize,
+		self.len,
+		heapType,
+		&self.BaseSequentialTree)
 }
 
 func (self *Heap) Insert(newVal interface{}) {
@@ -98,6 +102,12 @@ func (self *Heap) swapData(node1, node2 *Node) {
 	node2.data = container
 }
 
+func (self *Heap) swapPtr(node1, node2 *Node) {
+	container := node1
+	node1 = node2
+	node2 = container
+}
+
 // Used as a wrapper for the comparator for channelling in different heaps
 func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
 	if self.comparator != nil {
@@ -117,8 +127,59 @@ func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
 }
 
 func (self *Heap) Pop() (*interface{}, bool) {
-	panic("Not implemented yet!")
-	// Bubble down
+	if self.len == 0 {
+		return nil, false
+	}
+
+	fmt.Println("Removing - ", self.root)
+	lastElementIndex := self.nextInsertIndex - 1
+	respData := *self.root.data
+
+	// Remove the last element
+	lastElement := self.nodeArr[lastElementIndex]
+	self.swapData(lastElement, self.nodeArr[DEFAULT_ROOT_INDEX])
+	self.nodeArr[lastElementIndex] = nil
+	self.len -= 1
+
+	// Reheap down
+	self.reheapDown()
+
+	return &respData, true
+}
+
+func (self *Heap) reheapDown() {
+	if self.len <= 1 {
+		return
+	}
+
+	parentNode := self.root
+	needToCompareFlag := true
+
+	for needToCompareFlag {
+		rightChild := parentNode.link["right"]
+		leftChild := parentNode.link["left"]
+
+		if rightChild != nil || leftChild != nil {
+			heavyChild := leftChild
+			if rightChild != nil && leftChild != nil {
+				//Compare left/right child (Gasp!)
+				if self.isSizer(rightChild.data, leftChild.data) {
+					heavyChild = rightChild
+				}
+			} else if rightChild != nil && leftChild == nil {
+				heavyChild = rightChild
+			}
+
+			// Compare parent with child
+			if !self.isSizer(parentNode.data, heavyChild.data) {
+				self.swapData(parentNode, heavyChild)
+			} else {
+				needToCompareFlag = false
+			}
+		} else {
+			needToCompareFlag = false
+		}
+	}
 }
 
 // Keeping this for the interface purpose.
