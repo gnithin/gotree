@@ -5,7 +5,7 @@ import (
 	"gotree/helpers"
 	tree "gotree/tree"
 	"io/ioutil"
-	"os"
+	//"os"
 )
 
 type myObject struct {
@@ -16,12 +16,11 @@ type myObject struct {
 
 func main() {
 	heapObj := tree.CreateMinHeap()
-	heapObj.Insert(10)
-	heapObj.Insert(20)
-	heapObj.Insert(1001)
-	heapObj.Insert(120)
-	heapObj.Insert(100)
-	heapObj.Insert(1)
+	heapObj.Insert(
+		10, 20, 1001,
+		120, 100, 1)
+
+	fmt.Println(heapObj)
 	heapVal, isExists := heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
@@ -55,8 +54,6 @@ func main() {
 		fmt.Println("Failed")
 	}
 
-	os.Exit(1)
-
 	// Testing custom objects
 	///*
 	comparatorFunc := func(obj1, obj2 *interface{}) int {
@@ -79,10 +76,12 @@ func main() {
 	//customObjTree := tree.CreateTree()
 	///*
 	customObjTree := tree.CreateBSTWithComparator(&comparatorFunc)
-	customObjTree.Insert(myObject{name: "james", age: 51, sal: 230.000})
-	customObjTree.Insert(myObject{name: "mustaine", age: 55, sal: 140.000})
-	customObjTree.Insert(myObject{name: "tom", age: 20, sal: 1240.000})
-	customObjTree.Insert(myObject{name: "jerry", age: 11, sal: 1140.000})
+	customObjTree.Insert(
+		myObject{name: "james", age: 51, sal: 230.000},
+		myObject{name: "mustaine", age: 55, sal: 140.000},
+		myObject{name: "tom", age: 20, sal: 1240.000},
+		myObject{name: "jerry", age: 11, sal: 1140.000},
+	)
 
 	poppedObj, isPoppedExists := customObjTree.Pop()
 	if isPoppedExists {
@@ -96,27 +95,21 @@ func main() {
 	// Testing the strings
 	///*
 	stringTree := tree.CreateBST()
-	stringTree.Insert("hey")
-	stringTree.Insert("Oh")
-	stringTree.Insert("Listen")
-	stringTree.Insert("what")
-	stringTree.Insert("I")
-	stringTree.Insert("say")
-	stringTree.Insert("Oh")
+	stringTree.Insert(
+		"hey",
+		"Oh",
+		"Listen",
+		"what",
+		"I",
+		"say",
+		"Oh",
+	)
 	//*/
 
 	// Testing the numbers
 	///*
 	intTree := tree.CreateBST()
-	intTree.Insert(3)
-	intTree.Insert(5)
-	intTree.Insert(1)
-	intTree.Insert(10)
-	intTree.Insert(7)
-	intTree.Insert(6)
-	intTree.Insert(12)
-	intTree.Insert(4)
-
+	intTree.Insert(3, 5, 1, 10, 7, 6, 12, 4)
 	intTree.Remove(10)
 	intTree.Remove(1)
 	intTree.Insert(2)
