@@ -52,6 +52,9 @@ func (self *Heap) Insert(newVal interface{}) {
 		self.root = newNode
 	}
 
+	fmt.Println("Index - ", self.nextInsertIndex)
+	fmt.Println("Value - ", newVal)
+
 	// Inserting into the node arr
 	self.nodeArr[self.nextInsertIndex] = newNode
 	if self.nextInsertIndex != 0 {
@@ -60,13 +63,16 @@ func (self *Heap) Insert(newVal interface{}) {
 		if self.isLeftChild(self.nextInsertIndex) {
 			parentDirn = "left"
 		}
-
 		parentNode.link[parentDirn] = newNode
 		newNode.link["parent"] = parentNode
 
 		// Reheap up from here
 		self.reheapUp(newNode)
+
+		fmt.Println("Dirn - ", parentDirn)
 	}
+	fmt.Println("*********************")
+	self.len += 1
 	self.nextInsertIndex += 1
 }
 
