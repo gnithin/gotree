@@ -4,22 +4,61 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nu7hatch/gouuid"
+	"strconv"
+	"strings"
 )
 
-type Tree interface {
-	Insert(interface{})
-	HasVal(*Node, interface{}) bool
-	Remove(interface{}) bool
-	Pop() (*interface{}, bool)
+// Public interface funtions
+func CreateTree() *BaseTree {
+	return CreateTreeWithComparator(nil)
 }
 
-type BaseTree struct {
-	root        *Node
-	len         int
-	leavesLen   int
-	id          string
-	treeDispMap map[string]interface{}
-	comparator  *func(obj1, obj2 *interface{}) int
+func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BaseTree {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		panic("Error generating a new UUID.")
+	}
+
+	nodesArr := []map[string]interface{}{}
+	edgesArr := []map[string]interface{}{}
+
+	tMap := map[string]interface{}{
+		"nodes": nodesArr,
+		"edges": edgesArr,
+	}
+
+	return &BaseTree{
+		root:        nil,
+		len:         0,
+		leavesLen:   0,
+		id:          uuid.String(),
+		treeDispMap: tMap,
+		comparator:  comparator,
+	}
+}
+
+func CreateBST() *BST {
+	return CreateBSTWithComparator(nil)
+}
+
+func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST {
+	return &BST{*(CreateTreeWithComparator(comparator))}
+}
+
+func CreateHeap() *Heap {
+	return CreateMaxHeap()
+}
+
+func CreateMaxHeap() *Heap {
+	return CreateHeapWithComparator(nil, true, 0)
+}
+
+func CreateMinHeap() *Heap {
+	return CreateHeapWithComparator(nil, false, 0)
+}
+
+func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int, isMaxHeap bool, heapSize int) *Heap {
+	return MakeHeap(CreateTreeWithComparator(comparator), isMaxHeap, heapSize)
 }
 
 // Default integer comparator
@@ -48,41 +87,20 @@ func stringComparator(obj1, obj2 *interface{}) int {
 	}
 }
 
-func CreateTree() *BaseTree {
-	return CreateTreeWithComparator(nil)
+type Tree interface {
+	Insert(interface{})
+	HasVal(*Node, interface{}) bool
+	Remove(interface{}) bool
+	Pop() (*interface{}, bool)
 }
 
-func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BaseTree {
-	uuid, err := uuid.NewV4()
-	if err != nil {
-		panic("Error generating a new UUID.")
-	}
-
-	nodesArr := []map[string]interface{}{}
-	edgesArr := []map[string]interface{}{}
-
-	tMap := map[string]interface{}{
-		"nodes": nodesArr,
-		"edges": edgesArr,
-	}
-
-	return &BaseTree{
-		root:        nil,
-		len:         0,
-		leavesLen:   0,
-		id:          uuid.String(),
-		treeDispMap: tMap,
-		comparator:  comparator,
-	}
-
-}
-
-func CreateBST() *BST {
-	return CreateBSTWithComparator(nil)
-}
-
-func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST {
-	return &BST{*(CreateTreeWithComparator(comparator))}
+type BaseTree struct {
+	id          string
+	root        *Node
+	len         int
+	leavesLen   int
+	treeDispMap map[string]interface{}
+	comparator  *func(obj1, obj2 *interface{}) int
 }
 
 func (self *BaseTree) checkTypeForComparator(node *Node) {
@@ -212,4 +230,54 @@ func (self *BaseTree) postOrderTraverse(root *Node) (string, bool) {
 	}
 
 	return root.id, true
+}
+
+type BaseSequentialTree struct {
+	BaseTree
+	nodeArr []*Node
+	maxSize int
+}
+
+func (self *BaseSequentialTree) String() string {
+	// Only print the non empty values
+	// TODO: this can be made super fast
+	var respList []string
+	for i := 0; i < self.maxSize; i++ {
+		if self.nodeArr[i] != nil && self.nodeArr[i].data != nil {
+			respList = append(
+				respList,
+				strconv.Itoa(i)+":"+self.nodeArr[i].GetInfoString(),
+			)
+		}
+	}
+	resp := fmt.Sprintf(strings.Join(respList, "\n"))
+	return resp
+}
+
+func (self *BaseSequentialTree) getParentIndex(childIndex int) int {
+	if childIndex < 0 {
+		panic("Tree index cannot be < 0")
+	}
+
+	return (childIndex - 1) / 2
+}
+
+func (self *BaseSequentialTree) getChildIndex(parentIndex int, isLeft bool) int {
+	if parentIndex < 0 {
+		panic("Tree index cannot be < 0")
+	}
+
+	inc := 1
+	if !isLeft {
+		inc = 2
+	}
+	return (2 * parentIndex) + inc
+}
+
+func (self *BaseSequentialTree) isLeftChild(childIndex int) bool {
+	if childIndex <= 0 {
+		panic("Tree index cannot be <= 0")
+	}
+
+	return (childIndex % 2) != 0
 }

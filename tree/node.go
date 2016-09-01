@@ -3,7 +3,7 @@ package tree
 import (
 	"fmt"
 	"github.com/nu7hatch/gouuid"
-	"strings"
+	//"strings"
 )
 
 type Node struct {
@@ -33,28 +33,32 @@ func (n *Node) IsRight() bool {
 
 func (n *Node) String() string {
 	// only display the keys which have values
-	keysList := []string{
-		"left", "right", "parent",
-	}
-	var validKeyList []string
-
-	for _, key := range keysList {
-		_, isExists := n.link[key]
-		if isExists {
-			validKeyList = append(
-				validKeyList,
-				key,
-			)
+	/*
+		keysList := []string{
+			"left", "right", "parent",
 		}
-	}
+		var validKeyList []string
 
-	mapString := "No Valid maps"
-	validKeyStr := strings.Join(validKeyList, " ")
-	if validKeyStr != "" {
-		mapString = "Valid maps - " + validKeyStr
-	}
+		for _, key := range keysList {
+			_, isExists := n.link[key]
+			if isExists {
+				validKeyList = append(
+					validKeyList,
+					key,
+				)
+			}
+		}
 
-	return fmt.Sprintf("Data: %d\nMap: \n%s\n", n.data, mapString)
+		mapString := "No Valid maps"
+		validKeyStr := strings.Join(validKeyList, " ")
+		if validKeyStr != "" {
+			mapString = "Valid maps - " + validKeyStr
+		}
+
+		return fmt.Sprintf("Data: %d\nMap: \n%s\n", n.data, mapString)
+	*/
+
+	return fmt.Sprintf("Data: %v", *n.data)
 }
 
 func (n *Node) GetInfoString() string {

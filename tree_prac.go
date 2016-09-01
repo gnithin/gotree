@@ -5,6 +5,7 @@ import (
 	"gotree/helpers"
 	tree "gotree/tree"
 	"io/ioutil"
+	"os"
 )
 
 type myObject struct {
@@ -14,6 +15,48 @@ type myObject struct {
 }
 
 func main() {
+	heapObj := tree.CreateMinHeap()
+	heapObj.Insert(10)
+	heapObj.Insert(20)
+	heapObj.Insert(1001)
+	heapObj.Insert(120)
+	heapObj.Insert(100)
+	heapObj.Insert(1)
+	heapVal, isExists := heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	} else {
+		fmt.Println("Failed")
+	}
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	} else {
+		fmt.Println("Failed")
+	}
+
+	os.Exit(1)
+
 	// Testing custom objects
 	///*
 	comparatorFunc := func(obj1, obj2 *interface{}) int {
