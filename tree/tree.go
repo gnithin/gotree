@@ -48,7 +48,7 @@ func CreateHeap() *Heap {
 }
 
 func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
-	return makeHeap(CreateTreeWithComparator(comparator), true)
+	return MakeHeap(CreateTreeWithComparator(comparator), true)
 }
 
 // Default integer comparator
@@ -99,7 +99,7 @@ type BaseSequentialTree struct {
 }
 
 func (self *BaseSequentialTree) getParentIndex(childIndex int) int {
-	if childIndex <= 0 {
+	if childIndex < 0 {
 		panic("Tree index cannot be <= 0")
 	}
 

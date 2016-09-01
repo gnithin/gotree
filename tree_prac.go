@@ -5,7 +5,7 @@ import (
 	"gotree/helpers"
 	tree "gotree/tree"
 	"io/ioutil"
-	//"os"
+	"os"
 )
 
 type myObject struct {
@@ -15,11 +15,11 @@ type myObject struct {
 }
 
 func main() {
-	//heapObj := tree.CreateHeap()
-	//heapObj.Insert(10)
-	//fmt.Println(heapObj)
+	heapObj := tree.CreateHeap()
+	heapObj.Insert(10)
+	fmt.Println(heapObj)
 
-	//os.Exit(1)
+	os.Exit(1)
 
 	// Testing custom objects
 	///*

@@ -2,14 +2,8 @@ package tree
 
 const MAX_SIZE = 500
 
-// HEAP
-type Heap struct {
-	BaseSequentialTree
-	nextInsertIndex int
-	isMaxHeap       bool
-}
-
-func makeHeap(b *BaseTree, isMaxHeap bool) *Heap {
+// Public interface function
+func MakeHeap(b *BaseTree, isMaxHeap bool) *Heap {
 	return &Heap{
 		BaseSequentialTree{
 			*b,
@@ -20,7 +14,18 @@ func makeHeap(b *BaseTree, isMaxHeap bool) *Heap {
 	}
 }
 
+// HEAP
+type Heap struct {
+	BaseSequentialTree
+	nextInsertIndex int
+	isMaxHeap       bool
+}
+
 func (self *Heap) Insert(newVal interface{}) {
+	if self.nextInsertIndex >= MAX_SIZE {
+		panic("Heap size limit reached")
+	}
+
 	newNode := CreateTreeNode(&newVal)
 	if self.root == nil {
 		self.checkTypeForComparator(newNode)
@@ -29,17 +34,19 @@ func (self *Heap) Insert(newVal interface{}) {
 
 	// Inserting into the node arr
 	self.nodeArr[self.nextInsertIndex] = newNode
-	parentNode := self.nodeArr[self.getParentIndex(self.nextInsertIndex)]
-	parentDirn := "right"
-	if self.isLeftChild(self.nextInsertIndex) {
-		parentDirn = "left"
+	if self.nextInsertIndex != 0 {
+		parentNode := self.nodeArr[self.getParentIndex(self.nextInsertIndex)]
+		parentDirn := "right"
+		if self.isLeftChild(self.nextInsertIndex) {
+			parentDirn = "left"
+		}
+
+		parentNode.link[parentDirn] = newNode
+		newNode.link["parent"] = parentNode
+
+		// Reheap up from here
+		self.reheapUp(newNode)
 	}
-
-	parentNode.link[parentDirn] = newNode
-	newNode.link["parent"] = parentNode
-
-	// Reheap up from here
-	self.reheapUp(newNode)
 	self.nextInsertIndex += 1
 }
 
