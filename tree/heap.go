@@ -45,7 +45,18 @@ func (self *Heap) String() string {
 		&self.BaseSequentialTree)
 }
 
-func (self *Heap) Insert(newVal interface{}) {
+/*
+	Exact same code is available in BST as well.
+	Think about making it common somehow.
+	(Macros come to mind, by golang does not have it)
+*/
+func (self *Heap) Insert(valSlice ...interface{}) {
+	for _, val := range valSlice {
+		self.InsertOne(val)
+	}
+}
+
+func (self *Heap) InsertOne(newVal interface{}) {
 	if self.nextInsertIndex >= self.maxSize {
 		panic("Heap size limit reached")
 	}
@@ -203,6 +214,6 @@ func (self *Heap) HasVal(*Node, interface{}) bool {
 	panic("Heap does not understand the HasVal method. Get the root element")
 }
 
-func (self *Heap) Remove(interface{}) bool {
+func (self *Heap) Remove(...interface{}) bool {
 	panic("Heap does not understand the Remove method. Use pop()")
 }

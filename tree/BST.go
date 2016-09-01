@@ -8,7 +8,18 @@ type BST struct {
 	BaseTree
 }
 
-func (self *BST) Insert(newVal interface{}) {
+/*
+	Exact same code is available in BST as well.
+	Think about making it common somehow.
+	(Macros come to mind, by golang does not have it)
+*/
+func (self *BST) Insert(valSlice ...interface{}) {
+	for _, val := range valSlice {
+		self.InsertOne(val)
+	}
+}
+
+func (self *BST) InsertOne(newVal interface{}) {
 	newNode := CreateTreeNode(&newVal)
 	if self.root == nil {
 		self.checkTypeForComparator(newNode)
@@ -88,8 +99,16 @@ func (self *BST) Pop() (*interface{}, bool) {
 	return nil, false
 }
 
+func (self *BST) Remove(keySlice ...interface{}) bool {
+	respStatus := true
+	for _, key := range keySlice {
+		respStatus = respStatus && self.RemoveOne(key)
+	}
+	return respStatus
+}
+
 // Removing an element from a BST
-func (self *BST) Remove(key interface{}) bool {
+func (self *BST) RemoveOne(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
 		fmt.Println("Cannot find the required key to remove")
