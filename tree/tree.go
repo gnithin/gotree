@@ -46,7 +46,15 @@ func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST
 }
 
 func CreateHeap() *Heap {
+	return CreateMaxHeap()
+}
+
+func CreateMaxHeap() *Heap {
 	return CreateHeapWithComparator(nil, true, 0)
+}
+
+func CreateMinHeap() *Heap {
+	return CreateHeapWithComparator(nil, false, 0)
 }
 
 func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int, isMaxHeap bool, heapSize int) *Heap {
