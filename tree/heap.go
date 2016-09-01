@@ -3,7 +3,11 @@ package tree
 const MAX_SIZE = 500
 
 // Public interface function
-func MakeHeap(b *BaseTree, isMaxHeap bool) *Heap {
+func MakeHeap(b *BaseTree, isMaxHeap bool, heapSize int) *Heap {
+	if heapSize <= 0 {
+		heapSize = MAX_SIZE
+	}
+
 	return &Heap{
 		BaseSequentialTree{
 			*b,
@@ -11,6 +15,7 @@ func MakeHeap(b *BaseTree, isMaxHeap bool) *Heap {
 		},
 		0,
 		isMaxHeap,
+		heapSize,
 	}
 }
 
@@ -19,10 +24,14 @@ type Heap struct {
 	BaseSequentialTree
 	nextInsertIndex int
 	isMaxHeap       bool
+	maxSize         int
+}
+
+func (self *Heap) string() {
 }
 
 func (self *Heap) Insert(newVal interface{}) {
-	if self.nextInsertIndex >= MAX_SIZE {
+	if self.nextInsertIndex >= self.maxSize {
 		panic("Heap size limit reached")
 	}
 

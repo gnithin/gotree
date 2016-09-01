@@ -48,7 +48,7 @@ func CreateHeap() *Heap {
 }
 
 func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
-	return MakeHeap(CreateTreeWithComparator(comparator), true)
+	return MakeHeap(CreateTreeWithComparator(comparator), true, 0)
 }
 
 // Default integer comparator
