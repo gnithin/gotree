@@ -17,6 +17,7 @@ type myObject struct {
 func main() {
 	heapObj := tree.CreateHeap()
 	heapObj.Insert(10)
+	heapObj.Insert(20)
 	fmt.Println(heapObj)
 
 	os.Exit(1)

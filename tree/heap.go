@@ -1,6 +1,13 @@
 package tree
 
-const MAX_SIZE = 500
+import (
+	"fmt"
+)
+
+const (
+	MAX_SIZE           = 500
+	DEFAULT_ROOT_INDEX = 0
+)
 
 // Public interface function
 func MakeHeap(b *BaseTree, isMaxHeap bool, heapSize int) *Heap {
@@ -11,11 +18,11 @@ func MakeHeap(b *BaseTree, isMaxHeap bool, heapSize int) *Heap {
 	return &Heap{
 		BaseSequentialTree{
 			*b,
-			make([]*Node, MAX_SIZE),
+			make([]*Node, heapSize),
+			heapSize,
 		},
-		0,
+		DEFAULT_ROOT_INDEX,
 		isMaxHeap,
-		heapSize,
 	}
 }
 
@@ -24,10 +31,14 @@ type Heap struct {
 	BaseSequentialTree
 	nextInsertIndex int
 	isMaxHeap       bool
-	maxSize         int
 }
 
-func (self *Heap) string() {
+func (self *Heap) String() string {
+	heapType := "MinHeap"
+	if self.isMaxHeap {
+		heapType = "MaxHeap"
+	}
+	return fmt.Sprintf("Heap Size: %d\nHeap Type: %s\nTree:\n%v\n", self.maxSize, heapType, &self.BaseSequentialTree)
 }
 
 func (self *Heap) Insert(newVal interface{}) {

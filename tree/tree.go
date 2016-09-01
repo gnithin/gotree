@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nu7hatch/gouuid"
+	"strconv"
+	"strings"
 )
 
 // Public interface funtions
@@ -44,11 +46,11 @@ func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST
 }
 
 func CreateHeap() *Heap {
-	return CreateHeapWithComparator(nil)
+	return CreateHeapWithComparator(nil, true, 0)
 }
 
-func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
-	return MakeHeap(CreateTreeWithComparator(comparator), true, 0)
+func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int, isMaxHeap bool, heapSize int) *Heap {
+	return MakeHeap(CreateTreeWithComparator(comparator), isMaxHeap, heapSize)
 }
 
 // Default integer comparator
@@ -225,11 +227,28 @@ func (self *BaseTree) postOrderTraverse(root *Node) (string, bool) {
 type BaseSequentialTree struct {
 	BaseTree
 	nodeArr []*Node
+	maxSize int
+}
+
+func (self *BaseSequentialTree) String() string {
+	// Only print the non empty values
+	// TODO: this can be made super fast
+	var respList []string
+	for i := 0; i < self.maxSize; i++ {
+		if self.nodeArr[i] != nil && self.nodeArr[i].data != nil {
+			respList = append(
+				respList,
+				strconv.Itoa(i)+":"+self.nodeArr[i].GetInfoString(),
+			)
+		}
+	}
+	resp := fmt.Sprintf(strings.Join(respList, "\n"))
+	return resp
 }
 
 func (self *BaseSequentialTree) getParentIndex(childIndex int) int {
 	if childIndex < 0 {
-		panic("Tree index cannot be <= 0")
+		panic("Tree index cannot be < 0")
 	}
 
 	return (childIndex - 1) / 2
