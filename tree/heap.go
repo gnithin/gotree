@@ -1,74 +1,16 @@
 package tree
 
-type locationNode struct {
-	nodePtr *Node
-	dirn    string
-	nextPtr *locationNode
-}
-
-type nextLocationQueue struct {
-	front      *locationNode
-	rear       *locationNode
-	lastPopped *locationNode
-}
-
-func (q *nextLocationQueue) isEmpty() bool {
-	return q.front == nil && q.front == q.rear
-}
-
-func (q *nextLocationQueue) insertFront(locPtr *locationNode) {
-	if q.front != nil {
-		fNode := q.front
-		fNode.nextPtr = locPtr
-	}
-}
-
-func (q *nextLocationQueue) push(nodePtr *Node, dirn string) {
-	newNode := &(locationNode{
-		nodePtr: nodePtr,
-		dirn:    dirn,
-		nextPtr: nil,
-	})
-
-	// Add to the rear of the queue
-	if q.rear == nil {
-		q.rear = newNode
-
-		// It stands to reason that even q.front will be nil
-		q.front = newNode
-	} else {
-		oldElem := q.rear
-		oldElem.nextPtr = newNode
-		q.rear = newNode
-	}
-}
-
-func (q *nextLocationQueue) pop() *locationNode {
-	if q.front == nil {
-		return nil
-	}
-
-	nodeVal := q.front
-	q.front = nodeVal.nextPtr
-	return nodeVal
-}
-
 // HEAP
 type Heap struct {
 	BaseTree
-	locQueue  *nextLocationQueue
-	isMaxHeap bool
+	nextInsertIndex int
+	isMaxHeap       bool
 }
 
-func makeHeap(b *BaseTree, isMaxHeap bool) *Heap {
-	locQueue := &nextLocationQueue{
-		front: nil,
-		rear:  nil,
-	}
-
+func makeHeap(b *BaseSequentialTree, isMaxHeap bool) *Heap {
 	return &Heap{
 		*b,
-		locQueue,
+		0,
 		isMaxHeap,
 	}
 }

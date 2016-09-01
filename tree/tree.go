@@ -6,25 +6,49 @@ import (
 	"github.com/nu7hatch/gouuid"
 )
 
-type Tree interface {
-	Insert(interface{})
-	HasVal(*Node, interface{}) bool
-	Remove(interface{}) bool
-	Pop() (*interface{}, bool)
+// Public interface funtions
+func CreateTree() *BaseTree {
+	return CreateTreeWithComparator(nil)
 }
 
-type BaseTree struct {
-	root        *Node
-	len         int
-	leavesLen   int
-	id          string
-	treeDispMap map[string]interface{}
-	comparator  *func(obj1, obj2 *interface{}) int
+func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BaseTree {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		panic("Error generating a new UUID.")
+	}
+
+	nodesArr := []map[string]interface{}{}
+	edgesArr := []map[string]interface{}{}
+
+	tMap := map[string]interface{}{
+		"nodes": nodesArr,
+		"edges": edgesArr,
+	}
+
+	return &BaseTree{
+		root:        nil,
+		len:         0,
+		leavesLen:   0,
+		id:          uuid.String(),
+		treeDispMap: tMap,
+		comparator:  comparator,
+	}
 }
 
-type BaseSequentialTree struct {
-	BaseTree
-	nodeArr []*Node
+func CreateBST() *BST {
+	return CreateBSTWithComparator(nil)
+}
+
+func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST {
+	return &BST{*(CreateTreeWithComparator(comparator))}
+}
+
+func CreateHeap() *Heap {
+	return CreateHeapWithComparator(nil)
+}
+
+func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
+	return makeHeap(CreateTreeWithComparator(comparator), true)
 }
 
 // Default integer comparator
@@ -53,49 +77,25 @@ func stringComparator(obj1, obj2 *interface{}) int {
 	}
 }
 
-func CreateTree() *BaseTree {
-	return CreateTreeWithComparator(nil)
+type Tree interface {
+	Insert(interface{})
+	HasVal(*Node, interface{}) bool
+	Remove(interface{}) bool
+	Pop() (*interface{}, bool)
 }
 
-func CreateTreeWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BaseTree {
-	uuid, err := uuid.NewV4()
-	if err != nil {
-		panic("Error generating a new UUID.")
-	}
-
-	nodesArr := []map[string]interface{}{}
-	edgesArr := []map[string]interface{}{}
-
-	tMap := map[string]interface{}{
-		"nodes": nodesArr,
-		"edges": edgesArr,
-	}
-
-	return &BaseTree{
-		root:        nil,
-		len:         0,
-		leavesLen:   0,
-		id:          uuid.String(),
-		treeDispMap: tMap,
-		comparator:  comparator,
-	}
-
+type BaseTree struct {
+	id          string
+	root        *Node
+	len         int
+	leavesLen   int
+	treeDispMap map[string]interface{}
+	comparator  *func(obj1, obj2 *interface{}) int
 }
 
-func CreateBST() *BST {
-	return CreateBSTWithComparator(nil)
-}
-
-func CreateBSTWithComparator(comparator *func(obj1, obj2 *interface{}) int) *BST {
-	return &BST{*(CreateTreeWithComparator(comparator))}
-}
-
-func CreateHeap() *Heap {
-	return CreateHeapWithComparator(nil)
-}
-
-func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int) *Heap {
-	return makeHeap(CreateTreeWithComparator(comparator), true)
+type BaseSequentialTree struct {
+	BaseTree
+	nodeArr []*Node
 }
 
 func (self *BaseTree) checkTypeForComparator(node *Node) {
