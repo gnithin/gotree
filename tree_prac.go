@@ -5,7 +5,7 @@ import (
 	"gotree/helpers"
 	tree "gotree/tree"
 	"io/ioutil"
-	"os"
+	//"os"
 )
 
 type myObject struct {
@@ -75,7 +75,7 @@ func main() {
 		fmt.Println("Failed")
 	}
 
-	os.Exit(1)
+	//os.Exit(1)
 
 	// Testing custom objects
 	///*

@@ -54,15 +54,18 @@ func (self *Heap) String() string {
 	Think about making it common somehow.
 	(Macros come to mind, by golang does not have it)
 */
-func (self *Heap) Insert(valSlice ...interface{}) {
+func (self *Heap) Insert(valSlice ...interface{}) bool {
+	insertResp := true
 	for _, val := range valSlice {
-		self.InsertOne(val)
+		insertResp = insertResp && self.InsertOne(val)
 	}
+	return insertResp
 }
 
-func (self *Heap) InsertOne(newVal interface{}) {
+func (self *Heap) InsertOne(newVal interface{}) bool {
 	if self.nextInsertIndex >= self.maxSize {
-		panic("Heap size limit reached")
+		//fmt.Println("Heap size limit reached")
+		return false
 	}
 
 	newNode := CreateTreeNode(&newVal)
@@ -93,6 +96,7 @@ func (self *Heap) InsertOne(newVal interface{}) {
 	//fmt.Println("*********************")
 	self.len += 1
 	self.nextInsertIndex += 1
+	return true
 }
 
 func (self *Heap) reheapUp(node *Node) {
