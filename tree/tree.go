@@ -89,8 +89,7 @@ func stringComparator(obj1, obj2 *interface{}) int {
 
 // Bucket of common functionality available across the different trees
 type Tree interface {
-	Insert(...interface{})
-	HasVal(*Node, interface{}) bool
+	Insert(...interface{}) bool
 	Pop() (*interface{}, bool)
 }
 
