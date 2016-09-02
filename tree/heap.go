@@ -33,6 +33,10 @@ type Heap struct {
 	isMaxHeap       bool
 }
 
+func (self *Heap) GetHeapLen() int {
+	return self.len
+}
+
 func (self *Heap) String() string {
 	heapType := "MinHeap"
 	if self.isMaxHeap {
