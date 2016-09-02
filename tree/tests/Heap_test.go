@@ -27,12 +27,25 @@ func TestHeap_integer(t *testing.T) {
 		10001, 22, 1002, 101, 11,
 		32, 48, 54,
 	}
-	for _, val := range ipArr {
-		minHeapObj.Insert(val)
-		maxHeapObj.Insert(val)
+
+	// Hack to make the []int unpack into an interface{}
+	var ipInterfaceArr []interface{}
+	var ipInterafaceVal interface{}
+
+	for _, ipVal := range ipArr {
+		ipInterafaceVal = ipVal
+		ipInterfaceArr = append(
+			ipInterfaceArr,
+			ipInterafaceVal,
+		)
 	}
-	opMinHeapArr := getHeapOp(minHeapObj)
-	opMaxHeapArr := getHeapOp(maxHeapObj)
+
+	minHeapObj.Insert(ipInterfaceArr...)
+	maxHeapObj.Insert(ipInterfaceArr...)
+
+	// Getting the heap
+	opMinHeapArr := popAll(minHeapObj)
+	opMaxHeapArr := popAll(maxHeapObj)
 
 	// Compare the popped value and sorted Value
 	sort.Ints(ipArr)
@@ -42,7 +55,7 @@ func TestHeap_integer(t *testing.T) {
 	assert.True(compareIntSlices(ipArr, opMaxHeapArr))
 }
 
-func getHeapOp(heapVal *tree.Heap) []int {
+func popAll(heapVal *tree.Heap) []int {
 	var opArr []int
 	var poppedVal int
 	heapLen := heapVal.GetHeapLen()
