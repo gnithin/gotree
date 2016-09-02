@@ -203,6 +203,7 @@ func (self *Heap) reheapDown() {
 			// Compare parent with child
 			if !self.isSizer(parentNode.data, heavyChild.data) {
 				self.swapData(parentNode, heavyChild)
+				parentNode = heavyChild
 			} else {
 				needToCompareFlag = false
 			}
