@@ -71,8 +71,8 @@ func (self *Heap) InsertOne(newVal interface{}) {
 		self.root = newNode
 	}
 
-	fmt.Println("Index - ", self.nextInsertIndex)
-	fmt.Println("Value - ", newVal)
+	//fmt.Println("Index - ", self.nextInsertIndex)
+	//fmt.Println("Value - ", newVal)
 
 	// Inserting into the node arr
 	self.nodeArr[self.nextInsertIndex] = newNode
@@ -88,9 +88,9 @@ func (self *Heap) InsertOne(newVal interface{}) {
 		// Reheap up from here
 		self.reheapUp(newNode)
 
-		fmt.Println("Dirn - ", parentDirn)
+		//fmt.Println("Dirn - ", parentDirn)
 	}
-	fmt.Println("*********************")
+	//fmt.Println("*********************")
 	self.len += 1
 	self.nextInsertIndex += 1
 }

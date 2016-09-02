@@ -68,8 +68,6 @@ func TestHeap_integer(t *testing.T) {
 
 	// Compare the popped value and sorted Value
 	sort.Ints(ipArr)
-	fmt.Println(ipArr)
-	fmt.Println(opMinHeapArr)
 	assert.True(compareIntSlices(ipArr, opMinHeapArr))
 
 	sort.Sort(sort.Reverse(sort.IntSlice(ipArr)))
