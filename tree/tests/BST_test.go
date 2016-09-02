@@ -3,10 +3,9 @@ package testSuite
 // TODO: Benchmark stuff as well
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
-	"sort"
 	"testing"
 )
 
@@ -36,57 +35,40 @@ func TestBST_string(t *testing.T) {
 	// Compare the structure as well
 }
 
+type myObject struct {
+	name string
+	age  int
+	sal  float64
+}
+
 func TestBST_customObj(t *testing.T) {
-
-}
-
-func compareIntSlices(arr1, arr2 []int) bool {
-	for index, _ := range arr1 {
-		if arr1[index] != arr2[index] {
-			fmt.Println("Not matching", arr1[index], arr2[index])
-			return false
-		}
-	}
-	return true
-}
-
-func TestHeap_integer(t *testing.T) {
 	assert := assert.New(t)
-	maxHeapObj := tree.CreateMaxHeap()
-	minHeapObj := tree.CreateMinHeap()
+	comparatorFunc := func(obj1, obj2 *interface{}) int {
+		new_obj1 := (*obj1).(myObject)
+		new_obj2 := (*obj2).(myObject)
 
-	ipArr := []int{
-		10001, 22, 1002, 101, 11,
-		32, 48, 54,
-	}
-	for _, val := range ipArr {
-		minHeapObj.Insert(val)
-		maxHeapObj.Insert(val)
-	}
-	opMinHeapArr := getHeapOp(minHeapObj)
-	opMaxHeapArr := getHeapOp(maxHeapObj)
+		// This needn't be simple
+		metric1 := new_obj1.sal + float64(20*(new_obj1.age))
+		metric2 := new_obj2.sal + float64(20*(new_obj2.age))
 
-	// Compare the popped value and sorted Value
-	sort.Ints(ipArr)
-	assert.True(compareIntSlices(ipArr, opMinHeapArr))
-
-	sort.Sort(sort.Reverse(sort.IntSlice(ipArr)))
-	assert.True(compareIntSlices(ipArr, opMaxHeapArr))
-}
-
-func getHeapOp(heapVal *tree.Heap) []int {
-	var opArr []int
-	var poppedVal int
-	heapLen := heapVal.GetHeapLen()
-	for i := 0; i < heapLen; i++ {
-		poppedTempVal, popFlag := heapVal.Pop()
-		if poppedTempVal != nil && popFlag {
-			poppedVal = (*poppedTempVal).(int)
-			opArr = append(
-				opArr,
-				poppedVal,
-			)
+		if metric1 < metric2 {
+			return -1
+		} else if metric1 > metric2 {
+			return 1
+		} else {
+			return 0
 		}
 	}
-	return opArr
+
+	// Testing out an invalid custom tree
+	invalidCustomObjTree := tree.CreateBST()
+	assert.False(invalidCustomObjTree.Insert(myObject{name: "invalid", age: 199, sal: 100.00}))
+
+	customObjTree := tree.CreateBSTWithComparator(&comparatorFunc)
+	assert.True(customObjTree.Insert(
+		myObject{name: "james", age: 51, sal: 230.000},
+		myObject{name: "mustaine", age: 55, sal: 140.000},
+		myObject{name: "tom", age: 20, sal: 1240.000},
+		myObject{name: "jerry", age: 11, sal: 1140.000},
+	))
 }
