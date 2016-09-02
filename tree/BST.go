@@ -30,7 +30,10 @@ func (self *BST) InsertOne(newVal interface{}) bool {
 	newNode := CreateTreeNode(&newVal)
 	var insertStatus bool
 	if self.root == nil {
-		self.checkTypeForComparator(newNode)
+		isValid := self.checkTypeForComparator(newNode)
+		if !isValid {
+			return false
+		}
 		self.root = newNode
 		insertStatus = true
 	} else {

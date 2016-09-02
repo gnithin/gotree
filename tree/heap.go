@@ -70,7 +70,10 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 
 	newNode := CreateTreeNode(&newVal)
 	if self.root == nil {
-		self.checkTypeForComparator(newNode)
+		isValid := self.checkTypeForComparator(newNode)
+		if !isValid {
+			return false
+		}
 		self.root = newNode
 	}
 
