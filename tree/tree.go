@@ -89,8 +89,7 @@ func stringComparator(obj1, obj2 *interface{}) int {
 
 // Bucket of common functionality available across the different trees
 type Tree interface {
-	Insert(...interface{})
-	HasVal(*Node, interface{}) bool
+	Insert(...interface{}) bool
 	Pop() (*interface{}, bool)
 }
 
@@ -103,7 +102,7 @@ type BaseTree struct {
 	comparator  *func(obj1, obj2 *interface{}) int
 }
 
-func (self *BaseTree) checkTypeForComparator(node *Node) {
+func (self *BaseTree) checkTypeForComparator(node *Node) bool {
 	// Just check if there's a comparator specified
 	// Find the type. If the type is either a string or an int,
 	// add the default comparator. Else raise error
@@ -117,10 +116,12 @@ func (self *BaseTree) checkTypeForComparator(node *Node) {
 		self.comparator = &temp
 	default:
 		if self.comparator == nil {
-			fmt.Println("City on Fire... City on Fire... Mischief!! Mischief!!")
-			panic("Need to specify comparator if the type is not string or int")
+			//fmt.Println("City on Fire... City on Fire... Mischief!! Mischief!!")
+			//panic("Need to specify comparator if the type is not string or int")
+			return false
 		}
 	}
+	return true
 }
 
 // Creates a JSON output for the current tree as specified by alchemy

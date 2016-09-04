@@ -17,42 +17,65 @@ type myObject struct {
 func main() {
 	heapObj := tree.CreateMinHeap()
 	heapObj.Insert(
-		10, 20, 1001,
-		120, 100, 1)
+		10001, 22, 1002, 101, 11,
+		32, 48, 54)
 
 	fmt.Println(heapObj)
+	fmt.Println("Removing elements from here on")
 	heapVal, isExists := heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	} else {
 		fmt.Println("Failed")
 	}
+	fmt.Println(heapObj)
 	heapVal, isExists = heapObj.Pop()
 	if isExists {
 		fmt.Println(*heapVal)
 	} else {
 		fmt.Println("Failed")
 	}
+	fmt.Println(heapObj)
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	} else {
+		fmt.Println("Failed")
+	}
+	fmt.Println(heapObj)
+	heapVal, isExists = heapObj.Pop()
+	if isExists {
+		fmt.Println(*heapVal)
+	} else {
+		fmt.Println("Failed")
+	}
+
+	//os.Exit(1)
 
 	// Testing custom objects
 	///*

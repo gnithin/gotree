@@ -33,6 +33,10 @@ type Heap struct {
 	isMaxHeap       bool
 }
 
+func (self *Heap) GetHeapLen() int {
+	return self.len
+}
+
 func (self *Heap) String() string {
 	heapType := "MinHeap"
 	if self.isMaxHeap {
@@ -50,25 +54,31 @@ func (self *Heap) String() string {
 	Think about making it common somehow.
 	(Macros come to mind, by golang does not have it)
 */
-func (self *Heap) Insert(valSlice ...interface{}) {
+func (self *Heap) Insert(valSlice ...interface{}) bool {
+	insertResp := true
 	for _, val := range valSlice {
-		self.InsertOne(val)
+		insertResp = insertResp && self.InsertOne(val)
 	}
+	return insertResp
 }
 
-func (self *Heap) InsertOne(newVal interface{}) {
+func (self *Heap) InsertOne(newVal interface{}) bool {
 	if self.nextInsertIndex >= self.maxSize {
-		panic("Heap size limit reached")
+		//fmt.Println("Heap size limit reached")
+		return false
 	}
 
 	newNode := CreateTreeNode(&newVal)
 	if self.root == nil {
-		self.checkTypeForComparator(newNode)
+		isValid := self.checkTypeForComparator(newNode)
+		if !isValid {
+			return false
+		}
 		self.root = newNode
 	}
 
-	fmt.Println("Index - ", self.nextInsertIndex)
-	fmt.Println("Value - ", newVal)
+	//fmt.Println("Index - ", self.nextInsertIndex)
+	//fmt.Println("Value - ", newVal)
 
 	// Inserting into the node arr
 	self.nodeArr[self.nextInsertIndex] = newNode
@@ -84,11 +94,12 @@ func (self *Heap) InsertOne(newVal interface{}) {
 		// Reheap up from here
 		self.reheapUp(newNode)
 
-		fmt.Println("Dirn - ", parentDirn)
+		//fmt.Println("Dirn - ", parentDirn)
 	}
-	fmt.Println("*********************")
+	//fmt.Println("*********************")
 	self.len += 1
 	self.nextInsertIndex += 1
+	return true
 }
 
 func (self *Heap) reheapUp(node *Node) {
@@ -199,6 +210,7 @@ func (self *Heap) reheapDown() {
 			// Compare parent with child
 			if !self.isSizer(parentNode.data, heavyChild.data) {
 				self.swapData(parentNode, heavyChild)
+				parentNode = heavyChild
 			} else {
 				needToCompareFlag = false
 			}

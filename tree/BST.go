@@ -13,25 +13,39 @@ type BST struct {
 	Think about making it common somehow.
 	(Macros come to mind, by golang does not have it)
 */
-func (self *BST) Insert(valSlice ...interface{}) {
-	for _, val := range valSlice {
-		self.InsertOne(val)
+func (self *BST) Insert(valSlice ...interface{}) bool {
+	if len(valSlice) <= 0 {
+		panic("No value provided for insertion")
+		return false
 	}
+
+	insertStatus := true
+	for _, val := range valSlice {
+		insertStatus = insertStatus && self.InsertOne(val)
+	}
+	return insertStatus
 }
 
-func (self *BST) InsertOne(newVal interface{}) {
+func (self *BST) InsertOne(newVal interface{}) bool {
 	newNode := CreateTreeNode(&newVal)
+	var insertStatus bool
 	if self.root == nil {
-		self.checkTypeForComparator(newNode)
+		isValid := self.checkTypeForComparator(newNode)
+		if !isValid {
+			return false
+		}
 		self.root = newNode
+		insertStatus = true
 	} else {
-		self.insertBST(self.root, newNode)
+		insertStatus = self.insertBST(self.root, newNode)
 	}
 	self.len += 1
+
+	return insertStatus
 }
 
 // Insert into BST
-func (self *BST) insertBST(parent *Node, newNode *Node) {
+func (self *BST) insertBST(parent *Node, newNode *Node) bool {
 	if parent == nil {
 		panic("This shouldn't happen")
 	}
@@ -40,8 +54,8 @@ func (self *BST) insertBST(parent *Node, newNode *Node) {
 
 	if compareVal == 0 {
 		// There's no need to do anything
-		fmt.Println("Already found that value. Doing nothing")
-		return
+		//fmt.Println("Already found that value. Doing nothing")
+		return false
 	}
 
 	dirn := "left"
@@ -52,15 +66,16 @@ func (self *BST) insertBST(parent *Node, newNode *Node) {
 	childNode, isExists := parent.link[dirn]
 	// isExists needn't be checked. It can be safely removed
 	if isExists && childNode != nil {
-		fmt.Println("Going ", dirn)
-		self.insertBST(childNode, newNode)
+		//fmt.Println("Going ", dirn)
+		return self.insertBST(childNode, newNode)
 	} else {
-		fmt.Println("Inserting at ", dirn)
+		//fmt.Println("Inserting at ", dirn)
 		// It needs to be inserted here
 		parent.link[dirn] = newNode
 
 		// Adding a parent
 		newNode.link["parent"] = parent
+		return true
 	}
 }
 
