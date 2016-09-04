@@ -55,6 +55,10 @@ func (self *Heap) String() string {
 	(Macros come to mind, by golang does not have it)
 */
 func (self *Heap) Insert(valSlice ...interface{}) bool {
+	if len(valSlice) == 0 {
+		return false
+	}
+
 	insertResp := true
 	for _, val := range valSlice {
 		insertResp = insertResp && self.InsertOne(val)
