@@ -91,6 +91,10 @@ func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
 }
 
 func (self *Heap) reheapUp(node *Node) {
+	if self.len <= 1 {
+		return
+	}
+
 	parentNode := node.link["parent"]
 
 	for parentNode != nil && !self.isSizer(parentNode.data, node.data) {
@@ -154,7 +158,7 @@ func (self *Heap) Insert(valSlice ...interface{}) bool {
 }
 
 func (self *Heap) InsertOne(newVal interface{}) bool {
-	if self.nextInsertIndex >= self.maxSize {
+	if self.IsFull() {
 		//fmt.Println("Heap size limit reached")
 		return false
 	}
@@ -177,15 +181,15 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 			parentDirn = "left"
 		}
 
+		// Updating the link properties
 		parentNode.link[parentDirn] = newNode
 		newNode.link["parent"] = parentNode
 
-		// Reheap up from here
 		self.reheapUp(newNode)
 	}
 
-	self.len += 1
 	self.nextInsertIndex += 1
+	self.len += 1
 	return true
 }
 
@@ -193,7 +197,9 @@ func (self *Heap) Pop() (*interface{}, bool) {
 	if self.len == 0 {
 		return nil, false
 	}
+
 	lastElementIndex := self.nextInsertIndex - 1
+	// Copy data for returning purposes
 	respData := *self.root.data
 
 	// Remove the last element
