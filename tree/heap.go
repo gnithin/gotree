@@ -91,7 +91,7 @@ func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
 }
 
 func (self *Heap) reheapUp(node *Node) {
-	if self.len <= 1 {
+	if self.len <= 0 {
 		return
 	}
 
@@ -105,7 +105,7 @@ func (self *Heap) reheapUp(node *Node) {
 }
 
 func (self *Heap) reheapDown() {
-	if self.len <= 1 {
+	if self.len <= 0 {
 		return
 	}
 
@@ -115,6 +115,8 @@ func (self *Heap) reheapDown() {
 	for needToCompareFlag {
 		rightChild := parentNode.link["right"]
 		leftChild := parentNode.link["left"]
+
+		needToCompareFlag = false
 
 		if rightChild != nil || leftChild != nil {
 			heavyChild := leftChild
@@ -127,15 +129,14 @@ func (self *Heap) reheapDown() {
 				heavyChild = rightChild
 			}
 
-			// Compare parent with child
+			// Compare parent with the heavy child
 			if !self.isSizer(parentNode.data, heavyChild.data) {
 				self.swapData(parentNode, heavyChild)
 				parentNode = heavyChild
-			} else {
-				needToCompareFlag = false
+
+				// Need to repeat the loop because swapping happened
+				needToCompareFlag = true
 			}
-		} else {
-			needToCompareFlag = false
 		}
 	}
 }
