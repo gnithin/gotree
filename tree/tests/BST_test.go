@@ -12,12 +12,35 @@ import (
 func TestBST_integer(t *testing.T) {
 	assert := assert.New(t)
 
+	// Checking insertion
 	numberTree := tree.CreateBST()
 	assert.True(numberTree.Insert(3, 5, 1))
 	assert.True(numberTree.InsertOne(10))
-	assert.False(numberTree.Insert(5))
 
-	// Compare the structure as well
+	assert.False(numberTree.Insert())
+	assert.False(numberTree.Insert(5))
+	assert.False(numberTree.InsertOne(10))
+
+	// Checking for HasVal
+	insertList := []int{1, 3, 5, 10}
+	for _, val := range insertList {
+		assert.True(numberTree.HasVal(val))
+		assert.False(numberTree.HasVal(val + 1))
+	}
+
+	// Checking remove()
+	deleteItems := []interface{}{1, 3}
+	assert.True(numberTree.Remove(deleteItems...))
+	assert.False(numberTree.Remove(11111))
+
+	// Pop till you can't pop anymore
+	popStatus := true
+	numPops := 0
+	for popStatus {
+		_, popStatus = numberTree.Pop()
+		numPops += 1
+	}
+	assert.EqualValues(3, numPops)
 }
 
 func TestBST_string(t *testing.T) {
