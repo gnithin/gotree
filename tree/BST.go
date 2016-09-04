@@ -1,7 +1,7 @@
 package tree
 
 import (
-	"fmt"
+//"fmt"
 )
 
 type BST struct {
@@ -15,7 +15,7 @@ type BST struct {
 */
 func (self *BST) Insert(valSlice ...interface{}) bool {
 	if len(valSlice) <= 0 {
-		panic("No value provided for insertion")
+		// fmt.Println("No value provided for insertion")
 		return false
 	}
 
@@ -126,7 +126,7 @@ func (self *BST) Remove(keySlice ...interface{}) bool {
 func (self *BST) RemoveOne(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
-		fmt.Println("Cannot find the required key to remove")
+		//fmt.Println("Cannot find the required key to remove")
 		return false
 	}
 
