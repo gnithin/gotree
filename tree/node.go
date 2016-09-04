@@ -84,6 +84,14 @@ func (n *Node) GetInfoString() string {
 
 // Creates a node
 func CreateTreeNode(data *interface{}) *Node {
+	return CreateNode(data, map[string]*Node{
+		"left":   nil,
+		"right":  nil,
+		"parent": nil,
+	})
+}
+
+func CreateNode(data *interface{}, linkMap map[string]*Node) *Node {
 	uuid, err := uuid.NewV4()
 	if err != nil {
 		panic("Error generating a new UUID.")
@@ -92,10 +100,6 @@ func CreateTreeNode(data *interface{}) *Node {
 	return &Node{
 		id:   uuid.String(),
 		data: data,
-		link: map[string]*Node{
-			"left":   nil,
-			"right":  nil,
-			"parent": nil,
-		},
+		link: linkMap,
 	}
 }
