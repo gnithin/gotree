@@ -121,6 +121,10 @@ func (self *BST) Pop() (*interface{}, bool) {
 }
 
 func (self *BST) Remove(keySlice ...interface{}) bool {
+	if len(keySlice) == 0 {
+		return false
+	}
+
 	respStatus := true
 	for _, key := range keySlice {
 		respStatus = respStatus && self.RemoveOne(key)
