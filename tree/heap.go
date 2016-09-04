@@ -120,12 +120,12 @@ func (self *Heap) reheapDown() {
 
 		if rightChild != nil || leftChild != nil {
 			heavyChild := leftChild
+
 			if rightChild != nil && leftChild != nil {
-				//Compare left/right child (Gasp!)
 				if self.isSizer(rightChild.data, leftChild.data) {
 					heavyChild = rightChild
 				}
-			} else if rightChild != nil && leftChild == nil {
+			} else if rightChild != nil {
 				heavyChild = rightChild
 			}
 
