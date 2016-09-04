@@ -12,6 +12,23 @@ type Node struct {
 	link map[string]*Node
 }
 
+// Setters and getters
+func (n *Node) GetNodeData() *interface{} {
+	return n.data
+}
+
+func (n *Node) GetNodeLinks() map[string]*Node {
+	return n.link
+}
+
+func (n *Node) SetNodeData(data interface{}) {
+	n.data = &data
+}
+
+func (n *Node) SetNodeLink(link map[string]*Node) {
+	n.link = link
+}
+
 func (n *Node) isDirn(dirn string) bool {
 	if n != nil {
 		parentNode, isExists := n.link["parent"]
