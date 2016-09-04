@@ -5,7 +5,7 @@ import (
 	"gotree/helpers"
 	tree "gotree/tree"
 	"io/ioutil"
-	//"os"
+	"os"
 )
 
 type myObject struct {
@@ -15,6 +15,28 @@ type myObject struct {
 }
 
 func main() {
+
+	// Insert map
+	freqMap := map[string]int{
+		"a": 1,
+		"b": 2,
+		"c": 3,
+	}
+	// Create huffman tree
+	huffmanTree := tree.CreateHuffmanTree(freqMap)
+
+	// Encode string
+	encodedStr1 := huffmanTree.EncodeStr("abc")
+	encodedStr2 := huffmanTree.EncodeStr("abbbbccaabcbcb")
+
+	fmt.Println("Encoded - \n", encodedStr1, "\n", encodedStr2)
+
+	// Decode string
+
+	//
+
+	os.Exit(1)
+
 	heapObj := tree.CreateMinHeap()
 	heapObj.Insert(
 		10001, 22, 1002, 101, 11,
