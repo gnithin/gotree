@@ -53,6 +53,8 @@ func TestHeap_integer(t *testing.T) {
 
 	sort.Sort(sort.Reverse(sort.IntSlice(ipArr)))
 	assert.True(compareIntSlices(ipArr, opMaxHeapArr))
+
+	assert.False(maxHeapObj.IsFull())
 }
 
 func popAll(heapVal *tree.Heap) []int {

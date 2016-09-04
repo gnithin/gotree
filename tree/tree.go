@@ -282,3 +282,7 @@ func (self *BaseSequentialTree) isLeftChild(childIndex int) bool {
 
 	return (childIndex % 2) != 0
 }
+
+func (self *BaseSequentialTree) IsFull() bool {
+	return self.len >= self.maxSize
+}
