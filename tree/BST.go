@@ -8,6 +8,10 @@ type BST struct {
 	BaseTree
 }
 
+func (self *BST) GetBSTLen() int {
+	return self.len
+}
+
 /*
 	Exact same code is available in BST as well.
 	Think about making it common somehow.
@@ -39,7 +43,9 @@ func (self *BST) InsertOne(newVal interface{}) bool {
 	} else {
 		insertStatus = self.insertBST(self.root, newNode)
 	}
-	self.len += 1
+	if insertStatus {
+		self.len += 1
+	}
 
 	return insertStatus
 }
@@ -213,6 +219,8 @@ func (self *BST) RemoveOne(key interface{}) bool {
 	nodeResp.link["left"] = nil
 	nodeResp.link["right"] = nil
 	nodeResp.link["parent"] = nil
+
+	self.len -= 1
 
 	return true
 }

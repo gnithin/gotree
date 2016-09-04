@@ -41,6 +41,8 @@ func TestBST_integer(t *testing.T) {
 		numPops += 1
 	}
 	assert.EqualValues(3, numPops)
+
+	assert.EqualValues(0, numberTree.GetBSTLen())
 }
 
 func TestBST_string(t *testing.T) {
