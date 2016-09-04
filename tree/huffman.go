@@ -5,12 +5,14 @@ import (
 )
 
 type huffmanData struct {
-	data string
-	freq int
+	dataVal string
+	freq    int
+	leaf    bool
+	link    map[string]*huffmanData
 }
 
 type HuffmanTree struct {
-	BaseTree
+	root          *huffmanData
 	priorityQueue *Heap
 	freqMap       map[string]int
 }
@@ -29,7 +31,7 @@ func CreateHuffmanTree(freqMap map[string]int) *HuffmanTree {
 	}
 
 	return &HuffmanTree{
-		*CreateTree(),
+		nil,
 		CreateHeapWithComparator(&comparatorFunc, true, 500),
 		freqMap,
 	}
@@ -42,19 +44,53 @@ func (self *HuffmanTree) buildTree() bool {
 
 	respStatus := true
 	// Put everything inside the priority queue
+	var newData interface{}
 	for keyStr, freq := range self.freqMap {
+		newData = huffmanData{
+			keyStr,
+			freq,
+			true,
+			map[string]*huffmanData{
+				"0": nil,
+				"1": nil,
+			},
+		}
+		newNode := CreateTreeNode(&newData)
 		respStatus = respStatus &&
-			self.priorityQueue.Insert(huffmanData{
-				keyStr,
-				freq,
-			})
+			self.priorityQueue.Insert(newNode)
 	}
 
-	// TODO:
 	// Pop 2 elements at a time.
-	// Create a new node - Need to change huffmanData
-	// Then add it back
+	for !self.priorityQueue.IsEmpty() {
+		leftChildInt, isValidLChild := self.priorityQueue.Pop()
+		rightChildInt, isValidRChild := self.priorityQueue.Pop()
 
+		if isValidLChild {
+			leftChild := (*leftChildInt).(huffmanData)
+			if isValidRChild {
+				rightChild := (*rightChildInt).(huffmanData)
+
+				// Add the data from both the nodes
+				newData := huffmanData{
+					"",
+					leftChild.freq + rightChild.freq,
+					false,
+					map[string]*huffmanData{
+						"0": &rightChild,
+						"1": &leftChild,
+					},
+				}
+				var newDataInt interface{}
+				newDataInt = newData
+				newNode := CreateTreeNode(&newDataInt)
+				respStatus = respStatus &&
+					self.priorityQueue.Insert(newNode)
+			} else {
+				// Only one child remains. Add it to the tree
+				self.root = &leftChild
+			}
+		}
+	}
 	return true
 }
 
