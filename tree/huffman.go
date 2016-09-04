@@ -1,7 +1,7 @@
 package tree
 
 import (
-//"fmt"
+	"fmt"
 )
 
 type huffmanData struct {
@@ -30,17 +30,23 @@ func CreateHuffmanTree(freqMap map[string]int) *HuffmanTree {
 		}
 	}
 
-	return &HuffmanTree{
+	huffmanTree := &HuffmanTree{
 		nil,
 		CreateHeapWithComparator(&comparatorFunc, true, 500),
 		freqMap,
 	}
+
+	huffmanTree.buildTree()
+
+	return huffmanTree
 }
 
 func (self *HuffmanTree) buildTree() bool {
 	if len(self.freqMap) == 0 {
 		return false
 	}
+
+	fmt.Println("In buildtree")
 
 	respStatus := true
 	// Put everything inside the priority queue
@@ -55,9 +61,8 @@ func (self *HuffmanTree) buildTree() bool {
 				"1": nil,
 			},
 		}
-		newNode := CreateTreeNode(&newData)
 		respStatus = respStatus &&
-			self.priorityQueue.Insert(newNode)
+			self.priorityQueue.Insert(newData)
 	}
 
 	// Pop 2 elements at a time.
@@ -80,11 +85,8 @@ func (self *HuffmanTree) buildTree() bool {
 						"1": &leftChild,
 					},
 				}
-				var newDataInt interface{}
-				newDataInt = newData
-				newNode := CreateTreeNode(&newDataInt)
 				respStatus = respStatus &&
-					self.priorityQueue.Insert(newNode)
+					self.priorityQueue.Insert(newData)
 			} else {
 				// Only one child remains. Add it to the tree
 				self.root = &leftChild

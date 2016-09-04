@@ -191,6 +191,7 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 
 	self.nextInsertIndex += 1
 	self.len += 1
+	fmt.Println("Inserting", newVal)
 	return true
 }
 
@@ -229,6 +230,7 @@ func (self *Heap) Pop() (*interface{}, bool) {
 	// Reheap down
 	self.reheapDown()
 
+	fmt.Println("Popping - ", &respData)
 	return &respData, true
 }
 
