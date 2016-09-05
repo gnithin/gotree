@@ -102,6 +102,10 @@ if isValExists {
     minimumNum := (*minimumObj).(int)
 }
 ```
+The heap works with strings and custom objects similar to how it was shown above using BST.
+
+The [huffman tree](https://github.com/gnithin/gotree/blob/master/tree/huffman.go#L24-L38) internally uses a MinHeap by passing it's
+custom structure and comparator.
 
 ### Things left to do
 - Fix the UI part of creating a tree
