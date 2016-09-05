@@ -104,9 +104,6 @@ if isValExists {
 ```
 
 ### Things left to do
-- Create public stubs for simple binary trees as well(Flesh it out from the existing code).
-- Write tests for different types of objects as well as number of objects
 - Fix the UI part of creating a tree
 - Change doc by adding more code and diagrams
-- Create an example by using the lib for solving some problem - Eg: Huffman's algo. 
 - Create AVL trees
