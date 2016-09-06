@@ -1,0 +1,7 @@
+package: gotree
+import:
+- package: github.com/nu7hatch/gouuid
+testImport:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
