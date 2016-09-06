@@ -28,3 +28,5 @@ _testmain.go
 
 # Project specific
 assets/data/*
+glide.lock
+vendor/
