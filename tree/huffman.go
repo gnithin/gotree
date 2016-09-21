@@ -1,7 +1,6 @@
 package tree
 
 import (
-	"fmt"
 	"github.com/nu7hatch/gouuid"
 )
 
@@ -116,12 +115,13 @@ func (self *HuffmanTree) buildTree() bool {
 	// Fill the encoding map
 	// Traverse it upwards
 	for keyStr, valPtr := range leavesMapPtr {
-		fmt.Println(keyStr)
+		debug(keyStr)
+
 		leafNode := valPtr
 		codedStr := ""
 		for leafNode != nil {
-			fmt.Println(leafNode.freq)
-			fmt.Println(leafNode.link)
+			debug(leafNode.freq)
+			debug(leafNode.link)
 			//Find out what child the current node is
 			parentNode := leafNode.link["parent"]
 			if parentNode != nil {
@@ -129,7 +129,7 @@ func (self *HuffmanTree) buildTree() bool {
 				if parentNode.link["0"].id == leafNode.id {
 					selectedCode = "0"
 				}
-				fmt.Println("selected code - ", selectedCode)
+				debug("selected Code - ", selectedCode)
 
 				codedStr = selectedCode + codedStr
 

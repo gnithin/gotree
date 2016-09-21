@@ -120,7 +120,7 @@ func (self *BaseTree) checkTypeForComparator(node *Node) bool {
 		self.comparator = &temp
 	default:
 		if self.comparator == nil {
-			//fmt.Println("City on Fire... City on Fire... Mischief!! Mischief!!")
+			//debug("City on Fire... City on Fire... Mischief!! Mischief!!")
 			//panic("Need to specify comparator if the type is not string or int")
 			return false
 		}
@@ -131,7 +131,7 @@ func (self *BaseTree) checkTypeForComparator(node *Node) bool {
 // Creates a JSON output for the current tree as specified by alchemy
 func (self *BaseTree) GetJSONTree() []byte {
 	self.postOrderTraverse(self.root)
-	fmt.Println(self.treeDispMap)
+	debug(self.treeDispMap)
 
 	var treeJson []byte
 	var jsonErr error
@@ -143,8 +143,8 @@ func (self *BaseTree) GetJSONTree() []byte {
 	}
 
 	if jsonErr != nil {
-		fmt.Println("Error marshalling the tree to json")
-		fmt.Println(jsonErr)
+		debug("Error marshalling the tree to json")
+		debug(jsonErr)
 	} else {
 		return treeJson
 	}

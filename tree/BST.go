@@ -1,9 +1,5 @@
 package tree
 
-import (
-//"fmt"
-)
-
 type BST struct {
 	BaseTree
 }
@@ -19,7 +15,7 @@ func (self *BST) GetBSTLen() int {
 */
 func (self *BST) Insert(valSlice ...interface{}) bool {
 	if len(valSlice) <= 0 {
-		// fmt.Println("No value provided for insertion")
+		// debug("No value provided for insertion")
 		return false
 	}
 
@@ -60,7 +56,7 @@ func (self *BST) insertBST(parent *Node, newNode *Node) bool {
 
 	if compareVal == 0 {
 		// There's no need to do anything
-		//fmt.Println("Already found that value. Doing nothing")
+		//debug("Already found that value. Doing nothing")
 		return false
 	}
 
@@ -72,10 +68,10 @@ func (self *BST) insertBST(parent *Node, newNode *Node) bool {
 	childNode, isExists := parent.link[dirn]
 	// isExists needn't be checked. It can be safely removed
 	if isExists && childNode != nil {
-		//fmt.Println("Going ", dirn)
+		//debug("Going ", dirn)
 		return self.insertBST(childNode, newNode)
 	} else {
-		//fmt.Println("Inserting at ", dirn)
+		//debug("Inserting at ", dirn)
 		// It needs to be inserted here
 		parent.link[dirn] = newNode
 
@@ -136,7 +132,7 @@ func (self *BST) Remove(keySlice ...interface{}) bool {
 func (self *BST) RemoveOne(key interface{}) bool {
 	nodeResp := self.getNodeBST(self.root, key)
 	if nodeResp == nil {
-		//fmt.Println("Cannot find the required key to remove")
+		//debug("Cannot find the required key to remove")
 		return false
 	}
 
