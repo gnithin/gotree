@@ -6,8 +6,15 @@ import (
 	//"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
+	"os"
 	"testing"
 )
+
+func TestMain(m *testing.M) {
+	// Setting the debug mode to false
+	tree.DEBUG = false
+	os.Exit(m.Run())
+}
 
 func TestBST_integer(t *testing.T) {
 	assert := assert.New(t)

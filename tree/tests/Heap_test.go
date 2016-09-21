@@ -1,7 +1,6 @@
 package testSuite
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	"sort"
@@ -11,7 +10,6 @@ import (
 func compareIntSlices(arr1, arr2 []int) bool {
 	for index, _ := range arr1 {
 		if arr1[index] != arr2[index] {
-			fmt.Println("Not matching", arr1[index], arr2[index])
 			return false
 		}
 	}
