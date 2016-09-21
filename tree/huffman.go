@@ -103,6 +103,7 @@ func (self *HuffmanTree) buildTree() bool {
 				rightChild.link["parent"] = &newData
 				leftChild.link["parent"] = &newData
 
+				// Insert it back into the priority queue
 				respStatus = respStatus &&
 					self.priorityQueue.Insert(newData)
 			} else {
@@ -113,7 +114,7 @@ func (self *HuffmanTree) buildTree() bool {
 	}
 
 	// Fill the encoding map
-	// Traverse it upwards
+	// Traverse upwards till the root for every leaf
 	for keyStr, valPtr := range leavesMapPtr {
 		debug(keyStr)
 
@@ -122,6 +123,7 @@ func (self *HuffmanTree) buildTree() bool {
 		for leafNode != nil {
 			debug(leafNode.freq)
 			debug(leafNode.link)
+
 			//Find out what child the current node is
 			parentNode := leafNode.link["parent"]
 			if parentNode != nil {
