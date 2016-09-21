@@ -21,6 +21,8 @@ type HuffmanTree struct {
 }
 
 func CreateHuffmanTree(freqMap map[string]int) *HuffmanTree {
+	// Huffmans' custom comparator for the heap
+	// The heap uses the main comparision value as frequency
 	comparatorFunc := func(obj1, obj2 *interface{}) int {
 		new_obj1 := (*obj1).(huffmanData)
 		new_obj2 := (*obj2).(huffmanData)
@@ -40,7 +42,9 @@ func CreateHuffmanTree(freqMap map[string]int) *HuffmanTree {
 		make(map[string]string),
 	}
 
-	huffmanTree.buildTree()
+	if !huffmanTree.buildTree() {
+		return nil
+	}
 
 	return huffmanTree
 }
@@ -50,7 +54,6 @@ func (self *HuffmanTree) buildTree() bool {
 		return false
 	}
 
-	fmt.Println("In buildtree")
 	leavesMapPtr := make(map[string]*huffmanData)
 
 	respStatus := true
