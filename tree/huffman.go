@@ -144,5 +144,11 @@ func (self *HuffmanTree) buildTree() bool {
 }
 
 func (self *HuffmanTree) EncodeStr(ipStr string) string {
-	return "Not yet implemented"
+	debug("Encoding map - ", self.encodingMap)
+	encodedStr := ""
+	for _, r := range ipStr {
+		c := string(r)
+		encodedStr += self.encodingMap[c]
+	}
+	return encodedStr
 }

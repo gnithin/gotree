@@ -29,7 +29,7 @@ func main() {
 
 	// Encode string
 	encodedStr1 := huffmanTree.EncodeStr("abc")
-	encodedStr2 := huffmanTree.EncodeStr("abbbbccaabcbcb")
+	encodedStr2 := huffmanTree.EncodeStr("abbcccddddeeeee")
 
 	fmt.Println("Encoded - \n", encodedStr1, "\n", encodedStr2)
 
