@@ -154,3 +154,28 @@ func (self *HuffmanTree) EncodeStr(ipStr string) string {
 	}
 	return encodedStr
 }
+
+func (self *HuffmanTree) DecodeStr(ipStr string) string {
+	debug("****************")
+	debug("String to decode")
+	debug(ipStr)
+
+	curr_elem := self.root
+	op_str := ""
+
+	for _, r := range ipStr {
+		c := string(r)
+		debug("Debugging char-", c)
+		if curr_elem.leaf {
+			debug("Resetting again")
+			debug(curr_elem.dataVal)
+			curr_elem = self.root
+			op_str += string(curr_elem.freq)
+		} else {
+			curr_elem = curr_elem.link[c]
+		}
+	}
+
+	debug("****************")
+	return op_str
+}
