@@ -72,20 +72,32 @@ func (self *HuffmanTree) buildTree() bool {
 			},
 		}
 		interfaceData = newData
-		respStatus = respStatus &&
-			self.priorityQueue.Insert(interfaceData)
+
+		currInsStatus := self.priorityQueue.Insert(interfaceData)
+		respStatus = respStatus && currInsStatus
+
 		leavesMapPtr[keyStr] = &newData
 	}
 
+	debug("******************")
+	debug("Leaves!")
+	debug(leavesMapPtr)
+	debug(self.priorityQueue.GetHeapLen())
+	debug("******************")
+
 	// Pop 2 elements at a time.
 	for !self.priorityQueue.IsEmpty() {
+
+		debug("Heap len", self.priorityQueue.GetHeapLen())
 		leftChildInt, isValidLChild := self.priorityQueue.Pop()
 		rightChildInt, isValidRChild := self.priorityQueue.Pop()
 
 		if isValidLChild {
 			leftChild := (*leftChildInt).(huffmanData)
+			debug("Heap State - left - ", leftChild)
 			if isValidRChild {
 				rightChild := (*rightChildInt).(huffmanData)
+				debug("Heap State - right - ", rightChild)
 				uuid, _ := uuid.NewV4()
 
 				// Add the data from both the nodes
@@ -104,12 +116,15 @@ func (self *HuffmanTree) buildTree() bool {
 				leftChild.link["parent"] = &newData
 
 				// Insert it back into the priority queue
-				respStatus = respStatus &&
-					self.priorityQueue.Insert(newData)
+				debug("Inserting - ", newData)
+				insState := self.priorityQueue.Insert(newData)
+				respStatus = respStatus && insState
 			} else {
 				// Only one child remains. Add it to the tree
 				self.root = &leftChild
 			}
+		} else {
+			debug("Is INVALID LEFTIE")
 		}
 	}
 
@@ -161,6 +176,7 @@ func (self *HuffmanTree) DecodeStr(ipStr string) string {
 	debug(ipStr)
 
 	curr_elem := self.root
+	debug("Curr element - ", curr_elem)
 	op_str := ""
 
 	for _, r := range ipStr {
@@ -169,6 +185,7 @@ func (self *HuffmanTree) DecodeStr(ipStr string) string {
 		if curr_elem.leaf {
 			debug("Resetting again")
 			debug(curr_elem.dataVal)
+			debug(curr_elem.id)
 			curr_elem = self.root
 			op_str += string(curr_elem.freq)
 		} else {
