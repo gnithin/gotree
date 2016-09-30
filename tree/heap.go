@@ -227,10 +227,13 @@ func (self *Heap) Pop() (*interface{}, bool) {
 	self.len -= 1
 	self.nextInsertIndex -= 1
 
+	if self.len == 0 {
+		self.root = nil
+	}
 	// Reheap down
 	self.reheapDown()
 
-	debug("Popping - ", &respData)
+	debug("Popping - ", respData)
 	return &respData, true
 }
 
