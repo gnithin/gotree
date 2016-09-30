@@ -196,3 +196,21 @@ func (self *HuffmanTree) DecodeStr(ipStr string) string {
 
 	return op_str
 }
+
+// Creates a freq map for given input
+func CreateFreqMap(ipStr string) map[string]int {
+	// TODO: Add a exclude chars support
+	freqMap := make(map[string]int)
+
+	for _, ipRune := range ipStr {
+		ipChar := string(ipRune)
+
+		old_value, has_value := freqMap[ipChar]
+		if has_value {
+			freqMap[ipChar] = old_value + 1
+		} else {
+			freqMap[ipChar] = 0
+		}
+	}
+	return freqMap
+}
