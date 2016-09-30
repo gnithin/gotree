@@ -50,11 +50,19 @@ func CreateHeap() *Heap {
 }
 
 func CreateMaxHeap() *Heap {
-	return CreateHeapWithComparator(nil, true, 0)
+	return CreateMaxHeapWithSize(0)
+}
+
+func CreateMaxHeapWithSize(size int) *Heap {
+	return CreateHeapWithComparator(nil, true, size)
 }
 
 func CreateMinHeap() *Heap {
-	return CreateHeapWithComparator(nil, false, 0)
+	return CreateMinHeapWithSize(0)
+}
+
+func CreateMinHeapWithSize(size int) *Heap {
+	return CreateHeapWithComparator(nil, false, size)
 }
 
 func CreateHeapWithComparator(comparator *func(obj1, obj2 *interface{}) int, isMaxHeap bool, heapSize int) *Heap {
