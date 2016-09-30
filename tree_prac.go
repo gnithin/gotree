@@ -28,14 +28,18 @@ func main() {
 	huffmanTree := tree.CreateHuffmanTree(freqMap)
 
 	// Encode string
-	encodedStr1 := huffmanTree.EncodeStr("abc")
-	//encodedStr2 := huffmanTree.EncodeStr("abbcccddddeeeee")
+	original_string := "abc"
+	original_string = "abbcccddddeeeee"
+	encodedStr1 := huffmanTree.EncodeStr(original_string)
+	//encodedStr2 := huffmanTree.EncodeStr(")
 
-	//fmt.Println("Encoded - \n", encodedStr1, "\n", encodedStr2)
+	fmt.Println("Encoded - \n", encodedStr1)
 
 	// Decode string
 	decodedStr1 := huffmanTree.DecodeStr(encodedStr1)
 	fmt.Println("DecodedStr-", decodedStr1)
+
+	fmt.Println("Are they equal ? - ", original_string == decodedStr1)
 
 	//
 

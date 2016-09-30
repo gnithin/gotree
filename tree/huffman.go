@@ -181,18 +181,18 @@ func (self *HuffmanTree) DecodeStr(ipStr string) string {
 
 	for _, r := range ipStr {
 		c := string(r)
-		debug("Debugging char-", c)
+		curr_elem = curr_elem.link[c]
+
+		if curr_elem == nil {
+			debug("This should not happen")
+			panic("Reached an invalid state")
+		}
+
 		if curr_elem.leaf {
-			debug("Resetting again")
-			debug(curr_elem.dataVal)
-			debug(curr_elem.id)
+			op_str += string(curr_elem.dataVal)
 			curr_elem = self.root
-			op_str += string(curr_elem.freq)
-		} else {
-			curr_elem = curr_elem.link[c]
 		}
 	}
 
-	debug("****************")
 	return op_str
 }
