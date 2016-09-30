@@ -160,7 +160,7 @@ func (self *Heap) Insert(valSlice ...interface{}) bool {
 
 func (self *Heap) InsertOne(newVal interface{}) bool {
 	if self.IsFull() {
-		//debug("Heap size limit reached")
+		debug("Heap size limit reached")
 		return false
 	}
 
@@ -227,10 +227,13 @@ func (self *Heap) Pop() (*interface{}, bool) {
 	self.len -= 1
 	self.nextInsertIndex -= 1
 
+	if self.len == 0 {
+		self.root = nil
+	}
 	// Reheap down
 	self.reheapDown()
 
-	debug("Popping - ", &respData)
+	debug("Popping - ", respData)
 	return &respData, true
 }
 

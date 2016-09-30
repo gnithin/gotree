@@ -16,6 +16,38 @@ func compareIntSlices(arr1, arr2 []int) bool {
 	return true
 }
 
+func TestHeap_loadTesting(t *testing.T) {
+	assert := assert.New(t)
+
+	maxCount := 5000000
+	// This is 5 million.
+	// Crazily enough, this seems to work.
+	// In 47.9 secs. Don't know how fast that is.
+	// Any increase in maxCount seems to be linear.
+	// No errors, nothing.
+
+	// Pretty cool considering the whole project is
+	// implemented using the recursive strategies of tree.
+
+	// Procrastinating the custom stack implementation was a
+	// good idea :p
+	i := 0
+
+	maxHeapObj := tree.CreateMaxHeapWithSize(maxCount)
+
+	for i = 0; i < maxCount; i++ {
+		insert_status := maxHeapObj.InsertOne(i)
+		assert.True(insert_status)
+	}
+
+	for i > 0 {
+		i -= 1
+		poppedVal, _ := maxHeapObj.Pop()
+
+		assert.Equal((*poppedVal).(int), i)
+	}
+}
+
 func TestHeap_integer(t *testing.T) {
 	assert := assert.New(t)
 	maxHeapObj := tree.CreateMaxHeap()

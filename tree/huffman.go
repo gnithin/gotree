@@ -72,20 +72,32 @@ func (self *HuffmanTree) buildTree() bool {
 			},
 		}
 		interfaceData = newData
-		respStatus = respStatus &&
-			self.priorityQueue.Insert(interfaceData)
+
+		currInsStatus := self.priorityQueue.Insert(interfaceData)
+		respStatus = respStatus && currInsStatus
+
 		leavesMapPtr[keyStr] = &newData
 	}
 
+	debug("******************")
+	debug("Leaves!")
+	debug(leavesMapPtr)
+	debug(self.priorityQueue.GetHeapLen())
+	debug("******************")
+
 	// Pop 2 elements at a time.
 	for !self.priorityQueue.IsEmpty() {
+
+		debug("Heap len", self.priorityQueue.GetHeapLen())
 		leftChildInt, isValidLChild := self.priorityQueue.Pop()
 		rightChildInt, isValidRChild := self.priorityQueue.Pop()
 
 		if isValidLChild {
 			leftChild := (*leftChildInt).(huffmanData)
+			debug("Heap State - left - ", leftChild)
 			if isValidRChild {
 				rightChild := (*rightChildInt).(huffmanData)
+				debug("Heap State - right - ", rightChild)
 				uuid, _ := uuid.NewV4()
 
 				// Add the data from both the nodes
@@ -103,17 +115,21 @@ func (self *HuffmanTree) buildTree() bool {
 				rightChild.link["parent"] = &newData
 				leftChild.link["parent"] = &newData
 
-				respStatus = respStatus &&
-					self.priorityQueue.Insert(newData)
+				// Insert it back into the priority queue
+				debug("Inserting - ", newData)
+				insState := self.priorityQueue.Insert(newData)
+				respStatus = respStatus && insState
 			} else {
 				// Only one child remains. Add it to the tree
 				self.root = &leftChild
 			}
+		} else {
+			debug("Is INVALID LEFTIE")
 		}
 	}
 
 	// Fill the encoding map
-	// Traverse it upwards
+	// Traverse upwards till the root for every leaf
 	for keyStr, valPtr := range leavesMapPtr {
 		debug(keyStr)
 
@@ -122,6 +138,7 @@ func (self *HuffmanTree) buildTree() bool {
 		for leafNode != nil {
 			debug(leafNode.freq)
 			debug(leafNode.link)
+
 			//Find out what child the current node is
 			parentNode := leafNode.link["parent"]
 			if parentNode != nil {
@@ -144,5 +161,56 @@ func (self *HuffmanTree) buildTree() bool {
 }
 
 func (self *HuffmanTree) EncodeStr(ipStr string) string {
-	return "Not yet implemented"
+	debug("Encoding map - ", self.encodingMap)
+	encodedStr := ""
+	for _, r := range ipStr {
+		c := string(r)
+		encodedStr += self.encodingMap[c]
+	}
+	return encodedStr
+}
+
+func (self *HuffmanTree) DecodeStr(ipStr string) string {
+	debug("****************")
+	debug("String to decode")
+	debug(ipStr)
+
+	curr_elem := self.root
+	debug("Curr element - ", curr_elem)
+	op_str := ""
+
+	for _, r := range ipStr {
+		c := string(r)
+		curr_elem = curr_elem.link[c]
+
+		if curr_elem == nil {
+			debug("This should not happen")
+			panic("Reached an invalid state")
+		}
+
+		if curr_elem.leaf {
+			op_str += string(curr_elem.dataVal)
+			curr_elem = self.root
+		}
+	}
+
+	return op_str
+}
+
+// Creates a freq map for given input
+func CreateFreqMap(ipStr string) map[string]int {
+	// TODO: Add a exclude chars support
+	freqMap := make(map[string]int)
+
+	for _, ipRune := range ipStr {
+		ipChar := string(ipRune)
+
+		old_value, has_value := freqMap[ipChar]
+		if has_value {
+			freqMap[ipChar] = old_value + 1
+		} else {
+			freqMap[ipChar] = 0
+		}
+	}
+	return freqMap
 }
