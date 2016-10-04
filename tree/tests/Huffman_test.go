@@ -1,7 +1,6 @@
 package testSuite
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	"testing"
@@ -21,7 +20,6 @@ func TestHuffman_basic(t *testing.T) {
 		}
 	*/
 	original_string := "abbcccddddeeeee"
-	expectedResult := "000001001010101101010101111111111"
 
 	// Create huffman tree
 	freqMap := tree.CreateFreqMap(original_string)
@@ -30,8 +28,6 @@ func TestHuffman_basic(t *testing.T) {
 	// Encode string
 	encodedStr := huffmanTree.EncodeStr(original_string)
 
-	assert.Equal(encodedStr, expectedResult)
-
 	// Decode string
 	decodedStr := huffmanTree.DecodeStr(encodedStr)
 
@@ -39,15 +35,19 @@ func TestHuffman_basic(t *testing.T) {
 }
 
 func TestHuffman_lyrics(t *testing.T) {
+	assert := assert.New(t)
 	ipStr := "Say your prayers little one, don't forget my son, to include everyone."
 
 	// Create a frequency map
 	freqMap := tree.CreateFreqMap(ipStr)
-	fmt.Println(freqMap)
+	//fmt.Println(freqMap)
 
 	// Create huffman tree
 	huffmanTree := tree.CreateHuffmanTree(freqMap)
 
-	// Encode it.
-	fmt.Println(huffmanTree.EncodeStr(ipStr))
+	// Decode it
+	encodedStr := huffmanTree.EncodeStr(ipStr)
+
+	//fmt.Println("Encoded - ", len(encodedStr), " original - ", len(ipStr))
+	assert.Equal(huffmanTree.DecodeStr(encodedStr), ipStr)
 }
