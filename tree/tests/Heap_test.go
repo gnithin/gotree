@@ -1,6 +1,7 @@
 package testSuite
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	"sort"
@@ -87,8 +88,69 @@ func benchmarkHeap_insertion_k(k int, b *testing.B, isMaxHeap bool) {
 		heapObj.Insert(i)
 	}
 
+	fmt.Println(b.N)
 	for i := 0; i <= b.N; i++ {
 		heapObj.Insert(k)
+	}
+}
+
+func BenchmarkMaxHeap_pop5000(b *testing.B) {
+	benchmarkHeap_pop_k(5000, b, true)
+}
+
+func BenchmarkMaxHeap_pop20000(b *testing.B) {
+	benchmarkHeap_pop_k(20000, b, true)
+}
+
+func BenchmarkMaxHeap_pop50000(b *testing.B) {
+	benchmarkHeap_pop_k(50000, b, true)
+}
+
+func BenchmarkMaxHeap_pop90000(b *testing.B) {
+	benchmarkHeap_pop_k(90000, b, true)
+}
+
+func BenchmarkMaxHeap_pop100000(b *testing.B) {
+	benchmarkHeap_pop_k(100000, b, true)
+}
+
+func BenchmarkMaxHeap_pop200000(b *testing.B) {
+	benchmarkHeap_pop_k(200000, b, true)
+}
+
+func BenchmarkMaxHeap_pop300000(b *testing.B) {
+	benchmarkHeap_pop_k(300000, b, true)
+}
+
+func BenchmarkMaxHeap_pop400000(b *testing.B) {
+	benchmarkHeap_pop_k(400000, b, true)
+}
+
+func BenchmarkMaxHeap_pop500000(b *testing.B) {
+	benchmarkHeap_pop_k(500000, b, true)
+}
+
+// This method pops all
+func benchmarkHeap_pop_k(k int, b *testing.B, isMaxHeap bool) {
+	maxCount := k
+
+	// First filling the heap to brim
+	var heapObj *tree.Heap
+
+	if isMaxHeap {
+		heapObj = tree.CreateMaxHeapWithSize(maxCount)
+	} else {
+		heapObj = tree.CreateMinHeapWithSize(maxCount)
+	}
+
+	for i := 0; i < k; i++ {
+		heapObj.Insert(i)
+	}
+
+	for i := 0; i < b.N; i++ {
+		for j := maxCount; j > 0; j-- {
+			heapObj.Pop()
+		}
 	}
 }
 
