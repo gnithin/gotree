@@ -202,9 +202,9 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 	}
 
 	newNode := CreateTreeNode(&newVal)
+
 	if self.root == nil {
-		isValid := self.checkTypeForComparator(newNode)
-		if !isValid {
+		if !self.checkTypeForComparator(newNode) {
 			return false
 		}
 		self.root = newNode
@@ -229,7 +229,7 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 
 	self.nextInsertIndex += 1
 	self.len += 1
-	debug("Inserting", newVal)
+	//debug("Inserting", newVal)
 	return true
 }
 
