@@ -19,7 +19,7 @@ func compareIntSlices(arr1, arr2 []int) bool {
 func TestHeap_loadTesting(t *testing.T) {
 	assert := assert.New(t)
 
-	maxCount := 5000000
+	maxCount := 500
 	// This is 5 million.
 	// Crazily enough, this seems to work.
 	// In 47.9 secs. Don't know how fast that is.
