@@ -16,6 +16,82 @@ func compareIntSlices(arr1, arr2 []int) bool {
 	return true
 }
 
+func BenchmarkMaxHeap_ins_50000(b *testing.B) {
+	benchmarkHeap_insertion_k(50000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_90000(b *testing.B) {
+	benchmarkHeap_insertion_k(90000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_100000(b *testing.B) {
+	benchmarkHeap_insertion_k(100000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_200000(b *testing.B) {
+	benchmarkHeap_insertion_k(200000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_300000(b *testing.B) {
+	benchmarkHeap_insertion_k(300000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_400000(b *testing.B) {
+	benchmarkHeap_insertion_k(400000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_500000(b *testing.B) {
+	benchmarkHeap_insertion_k(500000, b, true)
+}
+
+func BenchmarkMinHeap_ins_50000(b *testing.B) {
+	benchmarkHeap_insertion_k(50000, b, false)
+}
+
+func BenchmarkMinHeap_ins_90000(b *testing.B) {
+	benchmarkHeap_insertion_k(90000, b, false)
+}
+
+func BenchmarkMinHeap_ins_100000(b *testing.B) {
+	benchmarkHeap_insertion_k(100000, b, false)
+}
+
+func BenchmarkMinHeap_ins_200000(b *testing.B) {
+	benchmarkHeap_insertion_k(200000, b, false)
+}
+
+func BenchmarkMinHeap_ins_300000(b *testing.B) {
+	benchmarkHeap_insertion_k(300000, b, false)
+}
+
+func BenchmarkMinHeap_ins_400000(b *testing.B) {
+	benchmarkHeap_insertion_k(400000, b, false)
+}
+
+func BenchmarkMinHeap_ins_500000(b *testing.B) {
+	benchmarkHeap_insertion_k(500000, b, false)
+}
+
+func benchmarkHeap_insertion_k(k int, b *testing.B, isMaxHeap bool) {
+	maxCount := k + 1
+
+	var heapObj *tree.Heap
+
+	if isMaxHeap {
+		heapObj = tree.CreateMaxHeapWithSize(maxCount)
+	} else {
+		heapObj = tree.CreateMinHeapWithSize(maxCount)
+	}
+
+	for i := 0; i < k; i++ {
+		heapObj.Insert(i)
+	}
+
+	for i := 0; i <= b.N; i++ {
+		heapObj.Insert(k)
+	}
+}
+
 func TestHeap_loadTesting(t *testing.T) {
 	assert := assert.New(t)
 
