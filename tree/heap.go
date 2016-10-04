@@ -141,6 +141,61 @@ func (self *Heap) reheapUp(node *Node) {
 	}
 }
 
+func (self *Heap) reheapDownSeq() {
+	if self.len <= 0 {
+		return
+	}
+
+	parentNode := self.root
+	parentNodeIndex := 0
+	needToCompareFlag := true
+
+	for needToCompareFlag {
+		rightIndex := self.getChildIndex(parentNodeIndex, false)
+		leftIndex := self.getChildIndex(parentNodeIndex, true)
+
+		var rightChild *Node
+		var leftChild *Node
+
+		rightChild = nil
+		leftChild = nil
+
+		if rightIndex > 0 && rightIndex < self.len {
+			rightChild = self.nodeArr[rightIndex]
+		}
+		if leftIndex > 0 && leftIndex < self.len {
+			leftChild = self.nodeArr[leftIndex]
+		}
+
+		needToCompareFlag = false
+
+		if rightChild != nil || leftChild != nil {
+			heavyChild := leftChild
+			newNextParentNodeIndex := leftIndex
+
+			if rightChild != nil && leftChild != nil {
+				if self.isSizer(rightChild.data, leftChild.data) {
+					heavyChild = rightChild
+					newNextParentNodeIndex = rightIndex
+				}
+			} else if rightChild != nil {
+				heavyChild = rightChild
+				newNextParentNodeIndex = rightIndex
+			}
+
+			// Compare parent with the heavy child
+			if !self.isSizer(parentNode.data, heavyChild.data) {
+				self.swapData(parentNode, heavyChild)
+				parentNode = heavyChild
+				parentNodeIndex = newNextParentNodeIndex
+
+				// Need to repeat the loop because swapping happened
+				needToCompareFlag = true
+			}
+		}
+	}
+}
+
 func (self *Heap) reheapDown() {
 	if self.len <= 0 {
 		return
@@ -269,9 +324,10 @@ func (self *Heap) Pop() (*interface{}, bool) {
 		self.root = nil
 	}
 	// Reheap down
-	self.reheapDown()
+	//self.reheapDown()
+	self.reheapDownSeq()
 
-	debug("Popping - ", respData)
+	//debug("Popping - ", respData)
 	return &respData, true
 }
 
