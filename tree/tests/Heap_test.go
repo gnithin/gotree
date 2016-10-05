@@ -17,6 +17,50 @@ func compareIntSlices(arr1, arr2 []int) bool {
 	return true
 }
 
+func BenchmarkExp_map(b *testing.B) {
+	s := "left13234521123123123 123123123123132123123121213"
+	myMap := map[string]int{
+		s:          1,
+		"right":    2,
+		"center":   3,
+		"1right":   2,
+		"2right":   2,
+		"3right":   2,
+		"4center":  3,
+		"55center": 3,
+		"c6enter":  3,
+	}
+
+	temp := 1
+	for i := 0; i < b.N; i++ {
+		temp = myMap[s]
+	}
+
+	temp = temp + 1
+}
+
+func BenchmarkExp_ptr(b *testing.B) {
+	newVal := 10
+	valPtr := &newVal
+	temp := 1
+	for i := 0; i < b.N; i++ {
+		temp = *valPtr
+	}
+
+	temp = temp + 1
+}
+
+func BenchmarkExp_arr(b *testing.B) {
+	size := 1000
+	arr := make([]int, size)
+	arr[size-1] = 1
+	var newVal int
+	for i := 0; i < b.N; i++ {
+		newVal = arr[size-1]
+	}
+	newVal = newVal + 1
+}
+
 func BenchmarkMaxHeap_ins_50000(b *testing.B) {
 	benchmarkHeap_insertion_k(50000, b, true)
 }
