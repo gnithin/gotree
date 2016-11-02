@@ -31,6 +31,10 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 	ipStr := ipObj.(string)
 	ipStr = strings.Trim(ipStr, "")
 
+	if self.caseInsensitive {
+		ipStr = strings.ToLower(ipStr)
+	}
+
 	if len(ipStr) == 0 {
 		debug("Trying to insert empty string")
 		return false
@@ -57,7 +61,7 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 		}
 
 		// Set the replenished current node value to support the final value
-		if self.matchSubstring && currIndex == finalIndex {
+		if !self.matchSubstring && currIndex == finalIndex {
 			currentNode.link[TRIE_FINAL_NODE_KEY] = nil
 		}
 	}
