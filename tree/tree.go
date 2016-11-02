@@ -9,6 +9,14 @@ import (
 )
 
 // Public interface funtions
+func CreateTrie() *Trie {
+	// By default adding a string comparator
+	funcPtr := stringComparator
+	return &Trie{
+		*CreateTreeWithComparator(&funcPtr),
+	}
+}
+
 func CreateTree() *BaseTree {
 	return CreateTreeWithComparator(nil)
 }
