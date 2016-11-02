@@ -27,4 +27,7 @@ func TestTrie_development(t *testing.T) {
 	// Insertion
 	insStatus := trieObj.Insert("basic Str")
 	t.Log(insStatus)
+	assert.True(insStatus)
+
+	// Searching
 }

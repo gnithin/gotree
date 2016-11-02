@@ -9,12 +9,31 @@ import (
 )
 
 // Public interface funtions
-func CreateTrie() *Trie {
+func CreateTrieWithOptions(supportSubstring, caseInsensitive bool) *Trie {
 	// By default adding a string comparator
 	funcPtr := stringComparator
-	return &Trie{
+	trieObj := &Trie{
 		*CreateTreeWithComparator(&funcPtr),
+		supportSubstring,
+		caseInsensitive,
 	}
+
+	// Creating a base element. It's the default start
+	var defaultVal interface{}
+	defaultVal = TRIE_DEFAULT_VALUE
+	baseElement := CreateNode(&defaultVal, map[string]*Node{})
+
+	// Assigning the base element to the root
+	trieObj.root = baseElement
+
+	return trieObj
+}
+
+func CreateTrie() *Trie {
+	return CreateTrieWithOptions(
+		TRIE_DEFAULT_SUBSTRING_MATCH,
+		TRIE_DEFAULT_CASE_INSENSITIVE,
+	)
 }
 
 func CreateTree() *BaseTree {
