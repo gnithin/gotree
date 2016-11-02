@@ -30,4 +30,6 @@ func TestTrie_development(t *testing.T) {
 	assert.True(insStatus)
 
 	// Searching
+	searchStatus := trieObj.HasVal("basic Str")
+	assert.True(searchStatus)
 }

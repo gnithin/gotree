@@ -61,7 +61,7 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 		}
 
 		// Set the replenished current node value to support the final value
-		if !self.matchSubstring && currIndex == finalIndex {
+		if currIndex == finalIndex {
 			currentNode.link[TRIE_FINAL_NODE_KEY] = nil
 		}
 	}
@@ -75,11 +75,37 @@ func (self *Trie) createTrieNode(charEntry byte) *Node {
 }
 
 func (self *Trie) HasVal(needle string) bool {
+	needle = strings.Trim(needle, "")
+	if self.caseInsensitive {
+		needle = strings.ToLower(needle)
+	}
+
+	if len(needle) <= 0 {
+		debug("Sent an empty string to search")
+		return false
+	}
+
 	currentNode := self.root
 	if currentNode == nil {
 		debug("Searching with nil current node in Trie")
 		return false
 	}
 
-	return false
+	for _, char := range needle {
+		nextNodeVal, isPresent := currentNode.link[string(char)]
+		if !isPresent {
+			debug("Failed at - ")
+			return false
+		}
+		currentNode = nextNodeVal
+	}
+
+	if self.matchSubstring {
+		return true
+	} else {
+		// Needs to match the whole thing, then the last node must
+		// have a final_node_key in it's link.
+		_, isFinalKeyPresent := currentNode.link[TRIE_FINAL_NODE_KEY]
+		return isFinalKeyPresent
+	}
 }
