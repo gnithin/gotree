@@ -20,6 +20,11 @@ func compareIntSlices(arr1, arr2 []int) bool {
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
 	trieObj := tree.CreateTrie()
-	assert.NotEmpty(trieObj)
 	t.Log(trieObj)
+
+	assert.NotEmpty(trieObj)
+
+	// Insertion
+	insStatus := trieObj.Insert("basic Str")
+	t.Log(insStatus)
 }
