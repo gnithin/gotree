@@ -27,7 +27,6 @@ func (self *Trie) Insert(valSlice ...interface{}) bool {
 }
 
 func (self *Trie) InsertOne(ipObj interface{}) bool {
-	debug(ipObj)
 	ipStr := ipObj.(string)
 	ipStr = strings.Trim(ipStr, "")
 
@@ -85,6 +84,8 @@ func (self *Trie) HasVal(needle string) bool {
 		return false
 	}
 
+	debug("Searching -", needle)
+
 	currentNode := self.root
 	if currentNode == nil {
 		debug("Searching with nil current node in Trie")
@@ -94,7 +95,6 @@ func (self *Trie) HasVal(needle string) bool {
 	for _, char := range needle {
 		nextNodeVal, isPresent := currentNode.link[string(char)]
 		if !isPresent {
-			debug("Failed at - ")
 			return false
 		}
 		currentNode = nextNodeVal
