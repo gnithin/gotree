@@ -107,6 +107,39 @@ The heap works with strings and custom objects similar to how it was shown above
 The [huffman tree](https://github.com/gnithin/gotree/blob/master/tree/huffman.go#L24-L38) internally uses a MinHeap by passing it's
 custom structure and comparator.
 
+### Trie
+Here's a basic example for using a Trie
+
+```go
+// Create a trieObject. It also allows some parameters
+trieObj := tree.CreateTrie()
+
+// Insert as many values as you want
+trieObj.Insert("I", "am", "gonna", "love", "you", "till", "the", "heaven", "starts", "to", "rain")
+
+// Search
+trieObj.HasVal("gonna")  # true:  Exact match
+trieObj.HasVal("GONna")  # true:  Case insensitive match
+trieObj.HasVal("heav")   # true:  Partial match
+trieObj.HasVal("absent") # false: Mismatch
+```
+The Trie is by default case insensitive and allows partial substring searches.
+The case insensitivity and partial matching ability can be controlled by passing 
+the valid parameters to the `CreateTrieWithOptions`
+
+```go
+// These two are true by default
+partialMatch := false
+caseInsensitive := false
+trieOptObj := tree.CreateTrieWithOptions(partialMatch, caseInsensitive)
+trieOptObj.Insert("Wherever", "I", "may", "roam", "where", "I", "lay", "my", "head", "is", "home")
+
+trieOptObj.HasVal("wherever")   # false:  Case sensitive match 
+trieOptObj.HasVal("Wherever")   # true
+trieOptObj.HasVal("hea")        # false:  It's a partial match
+trieOptObj.HasVal("head")       # true
+```
+
 ### Things left to do
 - Fix the UI part of creating a tree
 - Change doc by adding more code and diagrams
