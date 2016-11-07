@@ -9,6 +9,39 @@ import (
 )
 
 // Public interface funtions
+func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
+	ipMap := map[string]bool{
+		"partial_match":    TRIE_DEFAULT_SUBSTRING_MATCH,
+		"case_insensitive": TRIE_DEFAULT_CASE_INSENSITIVE,
+		"strip_stopwords":  TRIE_DEFAULT_STRIP_STOP_WORDS,
+		"word_separator":   TRIE_DEFAULT_WORD_SEPARATOR,
+	}
+
+	expectedList := []string{}
+	for key, _ := range expectedMap {
+		expectedList = append(expectedList, key)
+	}
+
+	// Check it with the input map
+
+	// By default adding a string comparator
+	funcPtr := stringComparator
+	trieObj := &Trie{
+		*CreateTreeWithComparator(&funcPtr),
+		supportSubstring,
+		caseInsensitive,
+	}
+
+	// Creating a base element. It's the default start
+	var defaultVal interface{}
+	defaultVal = TRIE_DEFAULT_VALUE
+	baseElement := CreateNode(&defaultVal, map[string]*Node{})
+
+	// Assigning the base element to the root
+	trieObj.root = baseElement
+
+	return trieObj
+}
 func CreateTrieWithOptions(supportSubstring, caseInsensitive bool) *Trie {
 	// By default adding a string comparator
 	funcPtr := stringComparator
