@@ -78,6 +78,26 @@ func TestTrie_multiple(t *testing.T) {
 	assert.False(trieObj.HasVal("chiller"))
 }
 
+func TestTrie_withOptions(t *testing.T) {
+	assert := assert.New(t)
+
+	// Creating a tree with options
+	options := map[string]bool{
+		"partial_match":    false,
+		"case_insensitive": false,
+		"strip_stopwords":  false,
+	}
+
+	trieObj := tree.CreateTrieWithOptionsMap(options)
+	trieObj.Insert(
+		"Orion", "is", "a", "freaking", "masterpiece!",
+	)
+
+	assert.False(trieObj.HasVal("orion"))
+	assert.False(trieObj.HasVal("freak"))
+	assert.True(trieObj.HasVal("masterpiece"))
+}
+
 // Let's Benchmark
 func BenchmarkExp_trieSearch(b *testing.B) {
 	trieObj := tree.CreateTrie()
