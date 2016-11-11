@@ -49,6 +49,11 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 		ipStr = strings.ToLower(ipStr)
 	}
 
+	if self.len == 0 && self.stripStopWords {
+		// Create the stop word's Trie
+
+	}
+
 	if len(ipStr) == 0 {
 		debug("Trying to insert empty string")
 		return false
@@ -79,6 +84,8 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 			currentNode.link[TRIE_FINAL_NODE_KEY] = nil
 		}
 	}
+
+	self.len += 1
 	return true
 }
 
