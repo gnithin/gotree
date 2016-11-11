@@ -10,26 +10,29 @@ import (
 
 // Public interface funtions
 func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
-	ipMap := map[string]bool{
-		"partial_match":    TRIE_DEFAULT_SUBSTRING_MATCH,
-		"case_insensitive": TRIE_DEFAULT_CASE_INSENSITIVE,
-		"strip_stopwords":  TRIE_DEFAULT_STRIP_STOP_WORDS,
-		"word_separator":   TRIE_DEFAULT_WORD_SEPARATOR,
+	expectedMap := map[string]bool{
+		"partial_match":      TRIE_DEFAULT_SUBSTRING_MATCH,
+		"case_insensitive":   TRIE_DEFAULT_CASE_INSENSITIVE,
+		"strip_stopwords":    TRIE_DEFAULT_STRIP_STOP_WORDS,
+		"strip_punctuations": TRIE_DEFAULT_STRIP_PUNCTUATIONS,
+		"word_separator":     TRIE_DEFAULT_WORD_SEPARATOR,
 	}
 
-	expectedList := []string{}
-	for key, _ := range expectedMap {
-		expectedList = append(expectedList, key)
+	for key, value := range ipMap {
+		_, keyExists := expectedMap[key]
+		if keyExists {
+			expectedMap[key] = value
+		} else {
+			debug("Incorrect key for creating a Trie", key)
+		}
 	}
-
-	// Check it with the input map
 
 	// By default adding a string comparator
 	funcPtr := stringComparator
 	trieObj := &Trie{
 		*CreateTreeWithComparator(&funcPtr),
-		supportSubstring,
-		caseInsensitive,
+		expectedMap["partial_match"],
+		expectedMap["case_insensitive"],
 	}
 
 	// Creating a base element. It's the default start
