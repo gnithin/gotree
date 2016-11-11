@@ -19,6 +19,9 @@ func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
 	}
 
 	for key, value := range ipMap {
+		expectedKey := strings.Trim(strings.ToLower(key), "")
+		debug(expectedKey)
+
 		_, keyExists := expectedMap[key]
 		if keyExists {
 			expectedMap[key] = value
@@ -30,9 +33,11 @@ func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
 	// By default adding a string comparator
 	funcPtr := stringComparator
 	trieObj := &Trie{
-		*CreateTreeWithComparator(&funcPtr),
-		expectedMap["partial_match"],
-		expectedMap["case_insensitive"],
+		BaseTree:          *CreateTreeWithComparator(&funcPtr),
+		matchSubstring:    expectedMap["partial_match"],
+		caseInsensitive:   expectedMap["case_insensitive"],
+		stripPunctuations: expectedMap["strip_punctuations"],
+		stripStopWords:    expectedMap["strip_stopwords"],
 	}
 
 	// Creating a base element. It's the default start
@@ -45,13 +50,16 @@ func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
 
 	return trieObj
 }
+
 func CreateTrieWithOptions(supportSubstring, caseInsensitive bool) *Trie {
 	// By default adding a string comparator
 	funcPtr := stringComparator
 	trieObj := &Trie{
-		*CreateTreeWithComparator(&funcPtr),
-		supportSubstring,
-		caseInsensitive,
+		BaseTree:          *CreateTreeWithComparator(&funcPtr),
+		matchSubstring:    supportSubstring,
+		caseInsensitive:   caseInsensitive,
+		stripPunctuations: TRIE_DEFAULT_STRIP_PUNCTUATIONS,
+		stripStopWords:    TRIE_DEFAULT_STRIP_STOP_WORDS,
 	}
 
 	// Creating a base element. It's the default start

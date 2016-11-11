@@ -2,13 +2,16 @@ package tree
 
 import (
 	"strings"
+	"unicode"
 )
 
 // This is basically all that's required.
 type Trie struct {
 	BaseTree
-	matchSubstring  bool
-	caseInsensitive bool
+	matchSubstring    bool
+	caseInsensitive   bool
+	stripPunctuations bool
+	stripStopWords    bool
 }
 
 func (self *Trie) Insert(valSlice ...interface{}) bool {
@@ -29,6 +32,18 @@ func (self *Trie) Insert(valSlice ...interface{}) bool {
 func (self *Trie) InsertOne(ipObj interface{}) bool {
 	ipStr := ipObj.(string)
 	ipStr = strings.Trim(ipStr, "")
+
+	if self.stripPunctuations {
+		ipStr = strings.Map(
+			func(r rune) rune {
+				if unicode.IsPunct(r) {
+					return -1
+				}
+				return r
+			},
+			ipStr,
+		)
+	}
 
 	if self.caseInsensitive {
 		ipStr = strings.ToLower(ipStr)

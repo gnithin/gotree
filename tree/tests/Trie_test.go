@@ -78,14 +78,15 @@ func TestTrie_multiple(t *testing.T) {
 	assert.False(trieObj.HasVal("chiller"))
 }
 
-func TestTrie_withOptions(t *testing.T) {
+func TestTrie_withOptionsMap(t *testing.T) {
 	assert := assert.New(t)
 
 	// Creating a tree with options
 	options := map[string]bool{
-		"partial_match":    false,
-		"case_insensitive": false,
-		"strip_stopwords":  false,
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    false,
+		"strip_punctuations": true,
 	}
 
 	trieObj := tree.CreateTrieWithOptionsMap(options)
