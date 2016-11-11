@@ -8,15 +8,6 @@ import (
 	"testing"
 )
 
-func compareIntSlices(arr1, arr2 []int) bool {
-	for index, _ := range arr1 {
-		if arr1[index] != arr2[index] {
-			return false
-		}
-	}
-	return true
-}
-
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
 
@@ -85,5 +76,17 @@ func TestTrie_multiple(t *testing.T) {
 	assert.False(trieObj.HasVal(""))
 	assert.False(trieObj.HasVal("wooot"))
 	assert.False(trieObj.HasVal("chiller"))
+}
 
+// Let's Benchmark
+func BenchmarkExp_trieSearch(b *testing.B) {
+	trieObj := tree.CreateTrie()
+	ipList := []interface{}{
+		"This", "has", "to", "be", "a", "line", "with", "a", "lot", "of", "words", "and", "some", "numbers", "like", "this", "12", "bigggggword",
+	}
+
+	trieObj.Insert(ipList...)
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal("This")
+	}
 }
