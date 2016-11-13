@@ -103,6 +103,8 @@ func TestTrie_stopWords(t *testing.T) {
 	assert := assert.New(t)
 
 	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
 		"strip_stopwords":    true,
 		"strip_punctuations": true,
 	}
@@ -115,10 +117,15 @@ func TestTrie_stopWords(t *testing.T) {
 		 I cannot live, 
 		 I cannot die,
 		 Trapped in myself, 
-		 Body my holding cell`,
+		 Body my holding cell!`,
 	)
 
 	assert.True(insertStatus)
+	assert.False(trieObj.HasVal("i"))
+	assert.False(trieObj.HasVal("my"))
+	assert.False(trieObj.HasVal("absolute"))
+	assert.True(trieObj.HasVal("Absolute"))
+	assert.False(trieObj.HasVal("body"))
 }
 
 // Let's Benchmark
