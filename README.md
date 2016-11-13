@@ -6,6 +6,7 @@ The Tree can store built-in types and custom types.
 Currently covered are -
 - BST
 - Heap (Priority Queue)
+- Trie
 
 All the trees have three basic functionalities
 - Insertion of new elements
@@ -144,7 +145,7 @@ You can also use the `CreateTrieWithOptionsMap` to try out all the flags used fo
 The below example represents all the options available. 
 This primarily showcases how to remove the stopwords before insertion, using the `strip_stopwords`.
 
-```
+```go
 options := map[string]bool{
     "case_insensitive":   false,
     "partial_match":      false,
