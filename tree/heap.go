@@ -90,6 +90,43 @@ func (self *Heap) isSizer(obj1, obj2 *interface{}) bool {
 	return false
 }
 
+func (self *Heap) reheapUpSeq(node *Node, currIndex int) {
+	if self.len <= 0 {
+		return
+	}
+
+	// Just trying out to see if the overhead of computing the parent
+	// arithmatically is faster than directyl linking the parent
+	//parentNode := node.link["parent"]
+	parentNodeInd := self.getParentIndex(currIndex)
+	if parentNodeInd >= 0 {
+		parentNode := self.nodeArr[parentNodeInd]
+
+		for parentNode != nil && !self.isSizer(parentNode.data, node.data) {
+			// TODO: Don't know how bad this is.
+			// On first glance, looks pretty bad.
+
+			// Reason : It's actually pretty simple to visualize the data being swapped.
+			// The links remain the same. Probably will have to check how badly
+			// the performance degrades if the maps are being swapped.
+			// Testing this on a life-sized structure should be more appropriate.
+
+			// Dude, data swapping is basically the data pointers being swapped.
+			// No harm in it. Asshole
+			self.swapData(parentNode, node)
+
+			node = parentNode
+			parentNode = nil
+			if parentNodeInd > 0 {
+				parentNodeInd = self.getParentIndex(parentNodeInd)
+				if parentNodeInd >= 0 {
+					parentNode = self.nodeArr[parentNodeInd]
+				}
+			}
+		}
+	}
+}
+
 func (self *Heap) reheapUp(node *Node) {
 	if self.len <= 0 {
 		return
@@ -101,6 +138,61 @@ func (self *Heap) reheapUp(node *Node) {
 		self.swapData(parentNode, node)
 		node = parentNode
 		parentNode = node.link["parent"]
+	}
+}
+
+func (self *Heap) reheapDownSeq() {
+	if self.len <= 0 {
+		return
+	}
+
+	parentNode := self.root
+	parentNodeIndex := 0
+	needToCompareFlag := true
+
+	for needToCompareFlag {
+		rightIndex := self.getChildIndex(parentNodeIndex, false)
+		leftIndex := self.getChildIndex(parentNodeIndex, true)
+
+		var rightChild *Node
+		var leftChild *Node
+
+		rightChild = nil
+		leftChild = nil
+
+		if rightIndex > 0 && rightIndex < self.len {
+			rightChild = self.nodeArr[rightIndex]
+		}
+		if leftIndex > 0 && leftIndex < self.len {
+			leftChild = self.nodeArr[leftIndex]
+		}
+
+		needToCompareFlag = false
+
+		if rightChild != nil || leftChild != nil {
+			heavyChild := leftChild
+			newNextParentNodeIndex := leftIndex
+
+			if rightChild != nil && leftChild != nil {
+				if self.isSizer(rightChild.data, leftChild.data) {
+					heavyChild = rightChild
+					newNextParentNodeIndex = rightIndex
+				}
+			} else if rightChild != nil {
+				heavyChild = rightChild
+				newNextParentNodeIndex = rightIndex
+			}
+
+			// Compare parent with the heavy child
+			if !self.isSizer(parentNode.data, heavyChild.data) {
+				self.swapData(parentNode, heavyChild)
+				parentNode = heavyChild
+				parentNodeIndex = newNextParentNodeIndex
+
+				// Need to repeat the loop because swapping happened
+				needToCompareFlag = true
+			}
+		}
 	}
 }
 
@@ -165,9 +257,9 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 	}
 
 	newNode := CreateTreeNode(&newVal)
+
 	if self.root == nil {
-		isValid := self.checkTypeForComparator(newNode)
-		if !isValid {
+		if !self.checkTypeForComparator(newNode) {
 			return false
 		}
 		self.root = newNode
@@ -186,12 +278,13 @@ func (self *Heap) InsertOne(newVal interface{}) bool {
 		parentNode.link[parentDirn] = newNode
 		newNode.link["parent"] = parentNode
 
-		self.reheapUp(newNode)
+		//self.reheapUp(newNode)
+		self.reheapUpSeq(newNode, self.nextInsertIndex)
 	}
 
 	self.nextInsertIndex += 1
 	self.len += 1
-	debug("Inserting", newVal)
+	//debug("Inserting", newVal)
 	return true
 }
 
@@ -231,9 +324,10 @@ func (self *Heap) Pop() (*interface{}, bool) {
 		self.root = nil
 	}
 	// Reheap down
-	self.reheapDown()
+	//self.reheapDown()
+	self.reheapDownSeq()
 
-	debug("Popping - ", respData)
+	//debug("Popping - ", respData)
 	return &respData, true
 }
 

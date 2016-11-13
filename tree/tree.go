@@ -9,6 +9,77 @@ import (
 )
 
 // Public interface funtions
+func CreateTrieWithOptionsMap(ipMap map[string]bool) *Trie {
+	expectedMap := map[string]bool{
+		"partial_match":      TRIE_DEFAULT_SUBSTRING_MATCH,
+		"case_insensitive":   TRIE_DEFAULT_CASE_INSENSITIVE,
+		"strip_stopwords":    TRIE_DEFAULT_STRIP_STOP_WORDS,
+		"strip_punctuations": TRIE_DEFAULT_STRIP_PUNCTUATIONS,
+		"word_separator":     TRIE_DEFAULT_WORD_SEPARATOR,
+	}
+
+	for key, value := range ipMap {
+		expectedKey := strings.Trim(strings.ToLower(key), "")
+		debug(expectedKey)
+
+		_, keyExists := expectedMap[key]
+		if keyExists {
+			expectedMap[key] = value
+		} else {
+			debug("Incorrect key for creating a Trie", key)
+		}
+	}
+
+	// By default adding a string comparator
+	funcPtr := stringComparator
+	trieObj := &Trie{
+		BaseTree:          *CreateTreeWithComparator(&funcPtr),
+		matchSubstring:    expectedMap["partial_match"],
+		caseInsensitive:   expectedMap["case_insensitive"],
+		stripPunctuations: expectedMap["strip_punctuations"],
+		stripStopWords:    expectedMap["strip_stopwords"],
+	}
+
+	// Creating a base element. It's the default start
+	var defaultVal interface{}
+	defaultVal = TRIE_DEFAULT_VALUE
+	baseElement := CreateNode(&defaultVal, map[string]*Node{})
+
+	// Assigning the base element to the root
+	trieObj.root = baseElement
+
+	return trieObj
+}
+
+func CreateTrieWithOptions(supportSubstring, caseInsensitive bool) *Trie {
+	// By default adding a string comparator
+	funcPtr := stringComparator
+	trieObj := &Trie{
+		BaseTree:          *CreateTreeWithComparator(&funcPtr),
+		matchSubstring:    supportSubstring,
+		caseInsensitive:   caseInsensitive,
+		stripPunctuations: TRIE_DEFAULT_STRIP_PUNCTUATIONS,
+		stripStopWords:    TRIE_DEFAULT_STRIP_STOP_WORDS,
+	}
+
+	// Creating a base element. It's the default start
+	var defaultVal interface{}
+	defaultVal = TRIE_DEFAULT_VALUE
+	baseElement := CreateNode(&defaultVal, map[string]*Node{})
+
+	// Assigning the base element to the root
+	trieObj.root = baseElement
+
+	return trieObj
+}
+
+func CreateTrie() *Trie {
+	return CreateTrieWithOptions(
+		TRIE_DEFAULT_SUBSTRING_MATCH,
+		TRIE_DEFAULT_CASE_INSENSITIVE,
+	)
+}
+
 func CreateTree() *BaseTree {
 	return CreateTreeWithComparator(nil)
 }

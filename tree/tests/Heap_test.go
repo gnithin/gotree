@@ -1,6 +1,7 @@
 package testSuite
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	"sort"
@@ -16,10 +17,191 @@ func compareIntSlices(arr1, arr2 []int) bool {
 	return true
 }
 
+func BenchmarkExp_map(b *testing.B) {
+	s := "left13234521123123123 123123123123132123123121213"
+	myMap := map[string]int{
+		s:          1,
+		"right":    2,
+		"center":   3,
+		"1right":   2,
+		"2right":   2,
+		"3right":   2,
+		"4center":  3,
+		"55center": 3,
+		"c6enter":  3,
+	}
+
+	temp := 1
+	for i := 0; i < b.N; i++ {
+		temp = myMap[s]
+	}
+
+	temp = temp + 1
+}
+
+func BenchmarkExp_ptr(b *testing.B) {
+	newVal := 10
+	valPtr := &newVal
+	temp := 1
+	for i := 0; i < b.N; i++ {
+		temp = *valPtr
+	}
+
+	temp = temp + 1
+}
+
+func BenchmarkExp_arr(b *testing.B) {
+	size := 1000
+	arr := make([]int, size)
+	arr[size-1] = 1
+	var newVal int
+	for i := 0; i < b.N; i++ {
+		newVal = arr[size-1]
+	}
+	newVal = newVal + 1
+}
+
+func BenchmarkMaxHeap_ins_50000(b *testing.B) {
+	benchmarkHeap_insertion_k(50000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_90000(b *testing.B) {
+	benchmarkHeap_insertion_k(90000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_100000(b *testing.B) {
+	benchmarkHeap_insertion_k(100000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_200000(b *testing.B) {
+	benchmarkHeap_insertion_k(200000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_300000(b *testing.B) {
+	benchmarkHeap_insertion_k(300000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_400000(b *testing.B) {
+	benchmarkHeap_insertion_k(400000, b, true)
+}
+
+func BenchmarkMaxHeap_ins_500000(b *testing.B) {
+	benchmarkHeap_insertion_k(500000, b, true)
+}
+
+func BenchmarkMinHeap_ins_50000(b *testing.B) {
+	benchmarkHeap_insertion_k(50000, b, false)
+}
+
+func BenchmarkMinHeap_ins_90000(b *testing.B) {
+	benchmarkHeap_insertion_k(90000, b, false)
+}
+
+func BenchmarkMinHeap_ins_100000(b *testing.B) {
+	benchmarkHeap_insertion_k(100000, b, false)
+}
+
+func BenchmarkMinHeap_ins_200000(b *testing.B) {
+	benchmarkHeap_insertion_k(200000, b, false)
+}
+
+func BenchmarkMinHeap_ins_300000(b *testing.B) {
+	benchmarkHeap_insertion_k(300000, b, false)
+}
+
+func BenchmarkMinHeap_ins_400000(b *testing.B) {
+	benchmarkHeap_insertion_k(400000, b, false)
+}
+
+func BenchmarkMinHeap_ins_500000(b *testing.B) {
+	benchmarkHeap_insertion_k(500000, b, false)
+}
+
+func benchmarkHeap_insertion_k(k int, b *testing.B, isMaxHeap bool) {
+	maxCount := k + 1
+
+	var heapObj *tree.Heap
+
+	if isMaxHeap {
+		heapObj = tree.CreateMaxHeapWithSize(maxCount)
+	} else {
+		heapObj = tree.CreateMinHeapWithSize(maxCount)
+	}
+
+	for i := 0; i < k; i++ {
+		heapObj.Insert(i)
+	}
+
+	fmt.Println(b.N)
+	for i := 0; i <= b.N; i++ {
+		heapObj.Insert(k)
+	}
+}
+
+func BenchmarkMaxHeap_pop5000(b *testing.B) {
+	benchmarkHeap_pop_k(5000, b, true)
+}
+
+func BenchmarkMaxHeap_pop20000(b *testing.B) {
+	benchmarkHeap_pop_k(20000, b, true)
+}
+
+func BenchmarkMaxHeap_pop50000(b *testing.B) {
+	benchmarkHeap_pop_k(50000, b, true)
+}
+
+func BenchmarkMaxHeap_pop90000(b *testing.B) {
+	benchmarkHeap_pop_k(90000, b, true)
+}
+
+func BenchmarkMaxHeap_pop100000(b *testing.B) {
+	benchmarkHeap_pop_k(100000, b, true)
+}
+
+func BenchmarkMaxHeap_pop200000(b *testing.B) {
+	benchmarkHeap_pop_k(200000, b, true)
+}
+
+func BenchmarkMaxHeap_pop300000(b *testing.B) {
+	benchmarkHeap_pop_k(300000, b, true)
+}
+
+func BenchmarkMaxHeap_pop400000(b *testing.B) {
+	benchmarkHeap_pop_k(400000, b, true)
+}
+
+func BenchmarkMaxHeap_pop500000(b *testing.B) {
+	benchmarkHeap_pop_k(500000, b, true)
+}
+
+// This method pops all
+func benchmarkHeap_pop_k(k int, b *testing.B, isMaxHeap bool) {
+	maxCount := k
+
+	// First filling the heap to brim
+	var heapObj *tree.Heap
+
+	if isMaxHeap {
+		heapObj = tree.CreateMaxHeapWithSize(maxCount)
+	} else {
+		heapObj = tree.CreateMinHeapWithSize(maxCount)
+	}
+
+	for i := 0; i < k; i++ {
+		heapObj.Insert(i)
+	}
+
+	for i := 0; i < b.N; i++ {
+		for j := maxCount; j > 0; j-- {
+			heapObj.Pop()
+		}
+	}
+}
+
 func TestHeap_loadTesting(t *testing.T) {
 	assert := assert.New(t)
 
-	maxCount := 5000000
+	maxCount := 500
 	// This is 5 million.
 	// Crazily enough, this seems to work.
 	// In 47.9 secs. Don't know how fast that is.

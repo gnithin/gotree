@@ -15,6 +15,26 @@ type myObject struct {
 }
 
 func main() {
+	trieObj := tree.CreateTrie()
+	trieObj.Insert("I", "am", "gonna", "love", "you", "till", "the", "heaven", "starts", "to", "rain")
+
+	fmt.Println(trieObj.HasVal("gonna"))
+	fmt.Println(trieObj.HasVal("GONna"))
+	fmt.Println(trieObj.HasVal("heav"))
+	fmt.Println(trieObj.HasVal("absent"))
+
+	// These two are true by default
+	partialMatch := false
+	caseInsensitive := false
+	trieOptObj := tree.CreateTrieWithOptions(partialMatch, caseInsensitive)
+	trieOptObj.Insert("Wherever", "I", "may", "roam", "where", "I", "lay", "my", "head", "is", "home")
+
+	fmt.Println(trieOptObj.HasVal("wherever"))
+	fmt.Println(trieOptObj.HasVal("Wherever"))
+	fmt.Println(trieOptObj.HasVal("hea"))
+	fmt.Println(trieOptObj.HasVal("head"))
+
+	os.Exit(1)
 
 	// Insert map
 	freqMap := map[string]int{
