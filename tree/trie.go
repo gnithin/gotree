@@ -26,7 +26,6 @@ func (self *Trie) InsertStr(ipStr string) bool {
 	//},
 	//)
 
-	debug("Called")
 	finalResp := false
 	ipList := strings.Fields(ipStr)
 	if len(ipList) > 0 {
@@ -40,7 +39,6 @@ func (self *Trie) InsertStr(ipStr string) bool {
 		*/
 		finalResp = true
 		for _, val := range ipList {
-			debug("Inserting - ", val)
 			intermediate_resp := self.InsertOne(val)
 			finalResp = finalResp && intermediate_resp
 		}
@@ -83,14 +81,20 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 		ipStr = strings.ToLower(ipStr)
 	}
 
-	if self.len == 0 && self.stripStopWords {
-		// Create the stop word's Trie
-
-	}
-
 	if len(ipStr) == 0 {
 		debug("Trying to insert empty string")
 		return false
+	}
+
+	if self.stripStopWords {
+		// Create the stop word's Trie - This is awesomely meta
+		stopWordsTrie := getTrieForStopWords()
+		if stopWordsTrie.HasVal(ipStr) {
+			debug("(stop word) Skipping", ipStr)
+
+			// returning true, otherwise the whole thing evaluates to false
+			return true
+		}
 	}
 
 	debug("Inserting ->", ipStr, "<-")
@@ -98,8 +102,7 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 	currentNode := self.root
 	finalIndex := len(ipStr) - 1
 
-	// TODO: When creating a radix tree, this loop will have
-	// to change.
+	// TODO: When creating a radix tree, this loop will have to change.
 	// Check if the existing nodes list has the value.
 	for currIndex, char := range ipStr {
 		mapVal, isPresent := currentNode.link[string(char)]

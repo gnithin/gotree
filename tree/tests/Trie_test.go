@@ -99,6 +99,28 @@ func TestTrie_withOptionsMap(t *testing.T) {
 	assert.True(trieObj.HasVal("masterpiece"))
 }
 
+func TestTrie_stopWords(t *testing.T) {
+	assert := assert.New(t)
+
+	options := map[string]bool{
+		"strip_stopwords":    true,
+		"strip_punctuations": true,
+	}
+
+	trieObj := tree.CreateTrieWithOptionsMap(options)
+
+	insertStatus := trieObj.InsertStr(
+		`Darkness, Imprisoning me.
+		 All that I see, Absolute horror! 
+		 I cannot live, 
+		 I cannot die,
+		 Trapped in myself, 
+		 Body my holding cell`,
+	)
+
+	assert.True(insertStatus)
+}
+
 // Let's Benchmark
 func BenchmarkExp_trieSearch(b *testing.B) {
 	trieObj := tree.CreateTrie()
