@@ -8,15 +8,6 @@ import (
 	"testing"
 )
 
-func compareIntSlices(arr1, arr2 []int) bool {
-	for index, _ := range arr1 {
-		if arr1[index] != arr2[index] {
-			return false
-		}
-	}
-	return true
-}
-
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
 
@@ -85,5 +76,67 @@ func TestTrie_multiple(t *testing.T) {
 	assert.False(trieObj.HasVal(""))
 	assert.False(trieObj.HasVal("wooot"))
 	assert.False(trieObj.HasVal("chiller"))
+}
 
+func TestTrie_withOptionsMap(t *testing.T) {
+	assert := assert.New(t)
+
+	// Creating a tree with options
+	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    false,
+		"strip_punctuations": true,
+	}
+
+	trieObj := tree.CreateTrieWithOptionsMap(options)
+	trieObj.Insert(
+		"Orion", "is", "a", "freaking", "masterpiece!",
+	)
+
+	assert.False(trieObj.HasVal("orion"))
+	assert.False(trieObj.HasVal("freak"))
+	assert.True(trieObj.HasVal("masterpiece"))
+}
+
+func TestTrie_stopWords(t *testing.T) {
+	assert := assert.New(t)
+
+	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    true,
+		"strip_punctuations": true,
+	}
+
+	trieObj := tree.CreateTrieWithOptionsMap(options)
+
+	insertStatus := trieObj.InsertStr(
+		`Darkness, Imprisoning me.
+		 All that I see, Absolute horror! 
+		 I cannot live, 
+		 I cannot die,
+		 Trapped in myself, 
+		 Body my holding cell!`,
+	)
+
+	assert.True(insertStatus)
+	assert.False(trieObj.HasVal("i"))
+	assert.False(trieObj.HasVal("my"))
+	assert.False(trieObj.HasVal("absolute"))
+	assert.True(trieObj.HasVal("Absolute"))
+	assert.False(trieObj.HasVal("body"))
+}
+
+// Let's Benchmark
+func BenchmarkExp_trieSearch(b *testing.B) {
+	trieObj := tree.CreateTrie()
+	ipList := []interface{}{
+		"This", "has", "to", "be", "a", "line", "with", "a", "lot", "of", "words", "and", "some", "numbers", "like", "this", "12", "bigggggword",
+	}
+
+	trieObj.Insert(ipList...)
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal("This")
+	}
 }

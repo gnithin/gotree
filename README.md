@@ -107,7 +107,7 @@ The heap works with strings and custom objects similar to how it was shown above
 The [huffman tree](https://github.com/gnithin/gotree/blob/master/tree/huffman.go#L24-L38) internally uses a MinHeap by passing it's
 custom structure and comparator.
 
-### Trie
+## Trie
 Here's a basic example for using a Trie
 
 ```go
@@ -118,10 +118,10 @@ trieObj := tree.CreateTrie()
 trieObj.Insert("I", "am", "gonna", "love", "you", "till", "the", "heaven", "starts", "to", "rain")
 
 // Search
-trieObj.HasVal("gonna")  # true:  Exact match
-trieObj.HasVal("GONna")  # true:  Case insensitive match
-trieObj.HasVal("heav")   # true:  Partial match
-trieObj.HasVal("absent") # false: Mismatch
+trieObj.HasVal("gonna")  // true:  Exact match
+trieObj.HasVal("GONna")  // true:  Case insensitive match
+trieObj.HasVal("heav")   // true:  Partial match
+trieObj.HasVal("absent") // false: Mismatch
 ```
 The Trie is by default case insensitive and allows partial substring searches.
 The case insensitivity and partial matching ability can be controlled by passing 
@@ -134,13 +134,38 @@ caseInsensitive := false
 trieOptObj := tree.CreateTrieWithOptions(partialMatch, caseInsensitive)
 trieOptObj.Insert("Wherever", "I", "may", "roam", "where", "I", "lay", "my", "head", "is", "home")
 
-trieOptObj.HasVal("wherever")   # false:  Case sensitive match 
-trieOptObj.HasVal("Wherever")   # true
-trieOptObj.HasVal("hea")        # false:  It's a partial match
-trieOptObj.HasVal("head")       # true
+trieOptObj.HasVal("wherever")  // false:  Case sensitive match 
+trieOptObj.HasVal("Wherever")  // true
+trieOptObj.HasVal("hea")       // false:  It's a partial match
+trieOptObj.HasVal("head")      // true
 ```
 
-### Things left to do
-- Fix the UI part of creating a tree
-- Change doc by adding more code and diagrams
-- Create AVL trees
+You can also use the `CreateTrieWithOptionsMap` to try out all the flags used for a Trie.
+The below example represents all the options available. 
+This primarily showcases how to remove the stopwords before insertion, using the `strip_stopwords`.
+
+```
+options := map[string]bool{
+    "case_insensitive":   false,
+    "partial_match":      false,
+    "strip_punctuations": true,
+    "strip_stopwords":    true,
+}
+
+trieObj := tree.CreateTrieWithOptionsMap(options)
+
+trieObj.InsertStr(
+    `Darkness, Imprisoning me.
+     All that I see, Absolute horror! 
+     I cannot live, 
+     I cannot die,
+     Trapped in myself, 
+     Body my holding cell!`,
+)
+
+trieObj.HasVal("i")         // False: Stopword
+trieObj.HasVal("my")        // False: Stopword
+trieObj.HasVal("absolute")  // False: Case-Insensitive
+trieObj.HasVal("Body")      // True 
+trieObj.HasVal("Absolute")  // True
+```

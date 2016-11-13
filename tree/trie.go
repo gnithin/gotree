@@ -2,13 +2,48 @@ package tree
 
 import (
 	"strings"
+	"unicode"
 )
 
 // This is basically all that's required.
 type Trie struct {
 	BaseTree
-	matchSubstring  bool
-	caseInsensitive bool
+	matchSubstring    bool
+	caseInsensitive   bool
+	stripPunctuations bool
+	stripStopWords    bool
+}
+
+func (self *Trie) InsertStr(ipStr string) bool {
+	// I know that strings.Fields does precisely this.
+	// But letting it open for allowing custom seperators
+	// in the future
+
+	//ipList = strings.FieldsFunc(
+	//ipStr,
+	//func(c rune) bool {
+	//return unicode.IsSpace(c)
+	//},
+	//)
+
+	finalResp := false
+	ipList := strings.Fields(ipStr)
+	if len(ipList) > 0 {
+		/*
+			Why am I doing this?
+			That's because golang does not allow me to
+			send []string... to an interface{}...
+			Do NOT use cutesy ideas of making another function
+			here to prevent DRY. That will also need the parameter
+			type.
+		*/
+		finalResp = true
+		for _, val := range ipList {
+			intermediate_resp := self.InsertOne(val)
+			finalResp = finalResp && intermediate_resp
+		}
+	}
+	return finalResp
 }
 
 func (self *Trie) Insert(valSlice ...interface{}) bool {
@@ -23,12 +58,24 @@ func (self *Trie) Insert(valSlice ...interface{}) bool {
 		finalResp = finalResp && intermediate_resp
 	}
 
-	return true
+	return finalResp
 }
 
 func (self *Trie) InsertOne(ipObj interface{}) bool {
 	ipStr := ipObj.(string)
 	ipStr = strings.Trim(ipStr, "")
+
+	if self.stripPunctuations {
+		ipStr = strings.Map(
+			func(r rune) rune {
+				if unicode.IsPunct(r) {
+					return -1
+				}
+				return r
+			},
+			ipStr,
+		)
+	}
 
 	if self.caseInsensitive {
 		ipStr = strings.ToLower(ipStr)
@@ -39,13 +86,23 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 		return false
 	}
 
+	if self.stripStopWords {
+		// Create the stop word's Trie - This is awesomely meta
+		stopWordsTrie := getTrieForStopWords()
+		if stopWordsTrie.HasVal(ipStr) {
+			debug("(stop word) Skipping", ipStr)
+
+			// returning true, otherwise the whole thing evaluates to false
+			return true
+		}
+	}
+
 	debug("Inserting ->", ipStr, "<-")
 
 	currentNode := self.root
 	finalIndex := len(ipStr) - 1
 
-	// TODO: When creating a radix tree, this loop will have
-	// to change.
+	// TODO: When creating a radix tree, this loop will have to change.
 	// Check if the existing nodes list has the value.
 	for currIndex, char := range ipStr {
 		mapVal, isPresent := currentNode.link[string(char)]
@@ -64,6 +121,8 @@ func (self *Trie) InsertOne(ipObj interface{}) bool {
 			currentNode.link[TRIE_FINAL_NODE_KEY] = nil
 		}
 	}
+
+	self.len += 1
 	return true
 }
 
