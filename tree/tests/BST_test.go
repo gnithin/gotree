@@ -12,7 +12,7 @@ import (
 
 func TestMain(m *testing.M) {
 	// Setting the debug mode to false
-	tree.DEBUG = true
+	tree.DEBUG = false
 	os.Exit(m.Run())
 }
 
