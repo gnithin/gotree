@@ -14,6 +14,40 @@ type Trie struct {
 	stripStopWords    bool
 }
 
+func (self *Trie) InsertStr(ipStr string) bool {
+	// I know that strings.Fields does precisely this.
+	// But letting it open for allowing custom seperators
+	// in the future
+
+	//ipList = strings.FieldsFunc(
+	//ipStr,
+	//func(c rune) bool {
+	//return unicode.IsSpace(c)
+	//},
+	//)
+
+	debug("Called")
+	finalResp := false
+	ipList := strings.Fields(ipStr)
+	if len(ipList) > 0 {
+		/*
+			Why am I doing this?
+			That's because golang does not allow me to
+			send []string... to an interface{}...
+			Do NOT use cutesy ideas of making another function
+			here to prevent DRY. That will also need the parameter
+			type.
+		*/
+		finalResp = true
+		for _, val := range ipList {
+			debug("Inserting - ", val)
+			intermediate_resp := self.InsertOne(val)
+			finalResp = finalResp && intermediate_resp
+		}
+	}
+	return finalResp
+}
+
 func (self *Trie) Insert(valSlice ...interface{}) bool {
 	if len(valSlice) <= 0 {
 		debug("Nothing to insert in a trie")
