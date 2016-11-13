@@ -26,7 +26,7 @@ func (self *Trie) Insert(valSlice ...interface{}) bool {
 		finalResp = finalResp && intermediate_resp
 	}
 
-	return true
+	return finalResp
 }
 
 func (self *Trie) InsertOne(ipObj interface{}) bool {
