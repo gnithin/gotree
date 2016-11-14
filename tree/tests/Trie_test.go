@@ -5,8 +5,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	//"sort"
+	"strings"
 	"testing"
 )
+
+var bigFilePath string = "resources/shakespeare_works.txt"
 
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
@@ -129,14 +132,58 @@ func TestTrie_stopWords(t *testing.T) {
 }
 
 // Let's Benchmark
-func BenchmarkExp_trieSearch(b *testing.B) {
-	trieObj := tree.CreateTrie()
-	ipList := []interface{}{
-		"This", "has", "to", "be", "a", "line", "with", "a", "lot", "of", "words", "and", "some", "numbers", "like", "this", "12", "bigggggword",
+func Benchmark_trieInsertion(b *testing.B) {
+	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    false,
+		"strip_punctuations": false,
 	}
 
-	trieObj.Insert(ipList...)
+	// Read a big file
+	fileContents := getFileContentsAsString(bigFilePath)
+
 	for i := 0; i < b.N; i++ {
-		trieObj.HasVal("This")
+		trieObj := tree.CreateTrieWithOptionsMap(options)
+		trieObj.InsertStr(fileContents)
 	}
+}
+
+func Benchmark_trieSearch(b *testing.B) {
+	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    false,
+		"strip_punctuations": false,
+	}
+
+	// Read a big file
+	fileContents := getFileContentsAsString(bigFilePath)
+	trieObj := tree.CreateTrieWithOptionsMap(options)
+	trieObj.InsertStr(fileContents)
+	searchKey := "Swinstead"
+
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal(searchKey)
+	}
+}
+
+func Benchmark_strSearch(b *testing.B) {
+	fileContents := getFileContentsAsString(bigFilePath)
+	searchKey := "Swinstead"
+	for i := 0; i < b.N; i++ {
+		strings.LastIndex(fileContents, searchKey)
+	}
+}
+
+func TestTrie_Insertion(t *testing.T) {
+	assert := assert.New(t)
+
+	fileContents := getFileContentsAsString(bigFilePath)
+	trieObj := tree.CreateTrie()
+
+	insStatus := trieObj.InsertStr(fileContents)
+	t.Log(trieObj.GetLen())
+
+	assert.True(insStatus)
 }
