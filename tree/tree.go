@@ -26,6 +26,10 @@ func (self *BaseTree) IsEmpty() bool {
 	return self.len == 0
 }
 
+func (self *BaseTree) GetLen() int {
+	return self.len
+}
+
 func (self *BaseTree) checkTypeForComparator(node *Node) bool {
 	// Just check if there's a comparator specified
 	// Find the type. If the type is either a string or an int,
