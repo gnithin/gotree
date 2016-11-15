@@ -10,6 +10,7 @@ import (
 )
 
 var bigFilePath string = "resources/shakespeare_works.txt"
+var searchKey string = "Swinstead"
 
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
@@ -161,7 +162,6 @@ func Benchmark_trieSearch(b *testing.B) {
 	fileContents := getFileContentsAsString(bigFilePath)
 	trieObj := tree.CreateTrieWithOptionsMap(options)
 	trieObj.InsertStr(fileContents)
-	searchKey := "Swinstead"
 
 	for i := 0; i < b.N; i++ {
 		trieObj.HasVal(searchKey)
@@ -170,7 +170,6 @@ func Benchmark_trieSearch(b *testing.B) {
 
 func Benchmark_strSearch(b *testing.B) {
 	fileContents := getFileContentsAsString(bigFilePath)
-	searchKey := "Swinstead"
 	for i := 0; i < b.N; i++ {
 		strings.LastIndex(fileContents, searchKey)
 	}
