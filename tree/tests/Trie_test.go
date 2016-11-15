@@ -10,7 +10,8 @@ import (
 )
 
 var bigFilePath string = "resources/shakespeare_works.txt"
-var searchKey string = "Swinstead"
+var passSearchKey string = "Swinstead"
+var failSearchKey string = "Nihtin"
 
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
@@ -132,6 +133,18 @@ func TestTrie_stopWords(t *testing.T) {
 	assert.False(trieObj.HasVal("body"))
 }
 
+func TestTrie_Insertion(t *testing.T) {
+	assert := assert.New(t)
+
+	fileContents := getFileContentsAsString(bigFilePath)
+	trieObj := tree.CreateTrie()
+
+	insStatus := trieObj.InsertStr(fileContents)
+	t.Log(trieObj.GetLen())
+
+	assert.True(insStatus)
+}
+
 // Let's Benchmark
 func Benchmark_trieInsertion(b *testing.B) {
 	options := map[string]bool{
@@ -150,39 +163,41 @@ func Benchmark_trieInsertion(b *testing.B) {
 	}
 }
 
-func Benchmark_trieSearch(b *testing.B) {
-	options := map[string]bool{
-		"partial_match":      false,
-		"case_insensitive":   false,
-		"strip_stopwords":    false,
-		"strip_punctuations": false,
-	}
-
-	// Read a big file
-	fileContents := getFileContentsAsString(bigFilePath)
-	trieObj := tree.CreateTrieWithOptionsMap(options)
-	trieObj.InsertStr(fileContents)
+func Benchmark_triePassSearch(b *testing.B) {
+	trieObj := createTrieWithBigFile()
 
 	for i := 0; i < b.N; i++ {
-		trieObj.HasVal(searchKey)
+		trieObj.HasVal(passSearchKey)
 	}
 }
 
-func Benchmark_strSearch(b *testing.B) {
+func Benchmark_strPassSearch(b *testing.B) {
 	fileContents := getFileContentsAsString(bigFilePath)
 	for i := 0; i < b.N; i++ {
-		strings.LastIndex(fileContents, searchKey)
+		strings.Index(fileContents, passSearchKey)
 	}
 }
 
-func TestTrie_Insertion(t *testing.T) {
-	assert := assert.New(t)
+func Benchmark_trieFailSearch(b *testing.B) {
+	trieObj := createTrieWithBigFile()
 
+	// Just assert the expected response once before the benchmark
+	assert := assert.New(b)
+	assert.False(trieObj.HasVal(failSearchKey))
+
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal(failSearchKey)
+	}
+}
+
+func Benchmark_strFailSearch(b *testing.B) {
+	assert := assert.New(b)
+
+	// Just assert the expected response once before the benchmark
 	fileContents := getFileContentsAsString(bigFilePath)
-	trieObj := tree.CreateTrie()
+	assert.Equal(strings.Index(fileContents, failSearchKey), -1)
 
-	insStatus := trieObj.InsertStr(fileContents)
-	t.Log(trieObj.GetLen())
-
-	assert.True(insStatus)
+	for i := 0; i < b.N; i++ {
+		strings.Index(fileContents, failSearchKey)
+	}
 }
