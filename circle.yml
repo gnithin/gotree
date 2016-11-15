@@ -1,0 +1,11 @@
+## Customize dependencies
+dependencies:
+    override:
+        # Installing glide
+        - curl https://glide.sh/get | sh
+        - glide install
+
+## Customize test commands
+test:
+  override:
+    - ./run_tests.sh

@@ -22,6 +22,33 @@ func debug(ip ...interface{}) {
 	}
 }
 
+// Default integer comparator
+func intComparator(obj1, obj2 *interface{}) int {
+	new_obj1 := (*obj1).(int)
+	new_obj2 := (*obj2).(int)
+	if new_obj1 < new_obj2 {
+		return -1
+	} else if new_obj1 > new_obj2 {
+		return 1
+	} else {
+		return 0
+	}
+}
+
+// Default string comparator
+func stringComparator(obj1, obj2 *interface{}) int {
+	new_obj1 := (*obj1).(string)
+	new_obj2 := (*obj2).(string)
+	if new_obj1 < new_obj2 {
+		return -1
+	} else if new_obj1 > new_obj2 {
+		return 1
+	} else {
+		return 0
+	}
+}
+
+// This is a function returns the trie containing all the stop words
 func getTrieForStopWords() *Trie {
 	if stopWordsTrie == nil {
 		oldDebug := DEBUG

@@ -5,8 +5,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gotree/tree"
 	//"sort"
+	"strings"
 	"testing"
 )
+
+var bigFilePath string = "resources/shakespeare_works.txt"
+var passSearchKey string = "Swinstead"
+var failSearchKey string = "Nihtin"
 
 func TestTrie_development(t *testing.T) {
 	assert := assert.New(t)
@@ -128,15 +133,71 @@ func TestTrie_stopWords(t *testing.T) {
 	assert.False(trieObj.HasVal("body"))
 }
 
-// Let's Benchmark
-func BenchmarkExp_trieSearch(b *testing.B) {
+func TestTrie_Insertion(t *testing.T) {
+	assert := assert.New(t)
+
+	fileContents := getFileContentsAsString(bigFilePath)
 	trieObj := tree.CreateTrie()
-	ipList := []interface{}{
-		"This", "has", "to", "be", "a", "line", "with", "a", "lot", "of", "words", "and", "some", "numbers", "like", "this", "12", "bigggggword",
+
+	insStatus := trieObj.InsertStr(fileContents)
+	t.Log(trieObj.GetLen())
+
+	assert.True(insStatus)
+}
+
+// Let's Benchmark
+func Benchmark_trieInsertion(b *testing.B) {
+	options := map[string]bool{
+		"partial_match":      false,
+		"case_insensitive":   false,
+		"strip_stopwords":    false,
+		"strip_punctuations": false,
 	}
 
-	trieObj.Insert(ipList...)
+	// Read a big file
+	fileContents := getFileContentsAsString(bigFilePath)
+
 	for i := 0; i < b.N; i++ {
-		trieObj.HasVal("This")
+		trieObj := tree.CreateTrieWithOptionsMap(options)
+		trieObj.InsertStr(fileContents)
+	}
+}
+
+func Benchmark_triePassSearch(b *testing.B) {
+	trieObj := createTrieWithBigFile()
+
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal(passSearchKey)
+	}
+}
+
+func Benchmark_strPassSearch(b *testing.B) {
+	fileContents := getFileContentsAsString(bigFilePath)
+	for i := 0; i < b.N; i++ {
+		strings.Index(fileContents, passSearchKey)
+	}
+}
+
+func Benchmark_trieFailSearch(b *testing.B) {
+	trieObj := createTrieWithBigFile()
+
+	// Just assert the expected response once before the benchmark
+	assert := assert.New(b)
+	assert.False(trieObj.HasVal(failSearchKey))
+
+	for i := 0; i < b.N; i++ {
+		trieObj.HasVal(failSearchKey)
+	}
+}
+
+func Benchmark_strFailSearch(b *testing.B) {
+	assert := assert.New(b)
+
+	// Just assert the expected response once before the benchmark
+	fileContents := getFileContentsAsString(bigFilePath)
+	assert.Equal(strings.Index(fileContents, failSearchKey), -1)
+
+	for i := 0; i < b.N; i++ {
+		strings.Index(fileContents, failSearchKey)
 	}
 }

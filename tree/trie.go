@@ -143,7 +143,7 @@ func (self *Trie) HasVal(needle string) bool {
 		return false
 	}
 
-	debug("Searching -", needle)
+	//debug("Searching -", needle)
 
 	currentNode := self.root
 	if currentNode == nil {

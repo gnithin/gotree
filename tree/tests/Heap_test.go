@@ -8,15 +8,6 @@ import (
 	"testing"
 )
 
-func compareIntSlices(arr1, arr2 []int) bool {
-	for index, _ := range arr1 {
-		if arr1[index] != arr2[index] {
-			return false
-		}
-	}
-	return true
-}
-
 func BenchmarkExp_map(b *testing.B) {
 	s := "left13234521123123123 123123123123132123123121213"
 	myMap := map[string]int{
