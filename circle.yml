@@ -1,16 +1,17 @@
 dependencies:
     override:
         - mkdir -p "/home/ubuntu/.go_workspace"
-        - rsync -azC --delete ./ "/home/ubuntu/.go_workspace/src/gotree/"
+        - rsync -azC --delete ./ "/home/ubuntu/.go_workspace/src/github.com/gnithin/gotree/"
 
 general:
     branches:
         only:
             - master
             - develop
+            - fix/circleci
 
 test:
     override:
         - go test -v:
             pwd:
-                ../.go_workspace/src/gotree/tree/tests
+                ../.go_workspace/src/github.com/gnithin/gotree/tree/tests
