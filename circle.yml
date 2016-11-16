@@ -1,11 +1,16 @@
-## Customize dependencies
 dependencies:
     override:
-        # Installing glide
-        - curl https://glide.sh/get | sh
-        - glide install
+        - mkdir -p "/home/ubuntu/.go_workspace"
+        - rsync -azC --delete ./ "/home/ubuntu/.go_workspace/src/gotree/"
 
-## Customize test commands
+general:
+    branches:
+        only:
+            - master
+            - develop
+
 test:
-  override:
-    - ./run_tests.sh
+    override:
+        - go test -v:
+            pwd:
+                ../.go_workspace/src/gotree/tree/tests
