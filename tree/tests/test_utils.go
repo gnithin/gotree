@@ -1,7 +1,7 @@
 package testSuite
 
 import (
-	"gotree/tree"
+	"github.com/gnithin/gotree/tree"
 	"io/ioutil"
 )
 
