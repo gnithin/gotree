@@ -1,6 +1,6 @@
 dependencies:
     override:
-        - mkdir -p "/home/ubuntu/.go_workspace"
+        - mkdir -p "/home/ubuntu/.go_workspace/src/github.com/gnithin"
         - rsync -azC --delete ./ "/home/ubuntu/.go_workspace/src/github.com/gnithin/gotree/"
 
 general:
