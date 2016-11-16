@@ -8,7 +8,7 @@ general:
         only:
             - master
             - develop
-            - fix/circleci
+            - feature/make-req
 
 test:
     override:
