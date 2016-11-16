@@ -2,7 +2,6 @@
 *.o
 *.a
 *.so
-.DS_Store
 
 # Folders
 _obj
@@ -21,13 +20,5 @@ _cgo_export.*
 _testmain.go
 
 *.exe
-*.test
-*.prof
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-# Project specific
-assets/data/*
-glide.lock
-#vendor/
+.DS_Store
