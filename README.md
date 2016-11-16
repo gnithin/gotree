@@ -1,5 +1,8 @@
 # goTree
 
+[![CircleCI branch](https://img.shields.io/circleci/project/github/gnithin/gotree/master.svg)](https://circleci.com/gh/gnithin/gotree)
+
+
 This repo consists of implementations of Trees in Go.
 The Tree can store built-in types and custom types.
 
