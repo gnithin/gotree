@@ -123,7 +123,7 @@ func benchmarkHeap_insertion_k(k int, b *testing.B, isMaxHeap bool) {
 		heapObj.Insert(i)
 	}
 
-	fmt.Println(b.N)
+	//fmt.Println(b.N)
 	for i := 0; i <= b.N; i++ {
 		heapObj.Insert(k)
 	}
