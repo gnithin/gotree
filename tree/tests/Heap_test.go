@@ -2,8 +2,8 @@ package testSuite
 
 import (
 	"fmt"
+	"github.com/gnithin/gotree/tree"
 	"github.com/stretchr/testify/assert"
-	"gotree/tree"
 	"sort"
 	"testing"
 )
