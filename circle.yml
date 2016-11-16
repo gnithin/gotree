@@ -8,10 +8,10 @@ general:
         only:
             - master
             - develop
-            - fix/circleci
+            - feature/make-req
 
 test:
     override:
-        - go test -v:
+        - ./run_tests.sh:
             pwd:
-                ../.go_workspace/src/github.com/gnithin/gotree/tree/tests
+                ../.go_workspace/src/github.com/gnithin/gotree

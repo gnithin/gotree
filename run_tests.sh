@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 cd ./tree/tests/
-go test -v
+go test -v -bench .
