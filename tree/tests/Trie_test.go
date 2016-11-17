@@ -140,7 +140,7 @@ func TestTrie_Insertion(t *testing.T) {
 	trieObj := tree.CreateTrie()
 
 	insStatus := trieObj.InsertStr(fileContents)
-	t.Log(trieObj.GetLen())
+	//t.Log(trieObj.GetLen())
 
 	assert.True(insStatus)
 }
